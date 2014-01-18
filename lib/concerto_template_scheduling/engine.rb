@@ -16,16 +16,16 @@ module ConcertoTemplateScheduling
         init do
           Rails.logger.info "ConcertoTemplateScheduling: Initialization code is running"
         end
+
+        # The following hooks allow integration into the main Concerto app
+        # at the controller and view levels.
+
+        add_controller_hook "ScreensController", :show, :before do
+          @schedule = Schedule.find_by_screen_id(@screen.id)
+        end
+
+        add_view_hook "ScreensController", :screen_details, :partial => "concerto_template_scheduling/screens/screen_link"
       end
-
-      # The following hooks allow integration into the main Concerto app
-      # at the controller and view levels.
-      
-      #add_controller_hook "ScreensController", :show, :before do
-      #  @player = Player.find_by_screen_id(@screen.id)
-      #end
-
-      #add_view_hook "ScreensController", :screen_details, :partial => "concerto_template_scheduling/screens/screen_link"
     end
   end
 end
