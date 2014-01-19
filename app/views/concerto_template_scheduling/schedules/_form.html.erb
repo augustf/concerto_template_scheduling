@@ -1,29 +1,78 @@
 <%= form_for(@schedule) do |f| %>
-  <% if @schedule.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@schedule.errors.count, "error") %> prohibited this schedule from being saved:</h2>
+  <%= render :partial => "layouts/errors", :object => @schedule %>
 
-      <ul>
-      <% @schedule.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
+  <fieldset>
+    <legend><span><%= t('.provide_details') %></span></legend>
+
+    <%= f.hidden_field :screen_id %>
+
+    <!-- choose template -->
+
+
+    <div class="row-fluid">
+      <div class="span6">
+        <div class="row-fluid">
+          <div class="span6">
+            <div class="clearfix datetime">
+              <%= f.label :start_time, t('.valid_from') %>
+              <div class="input">
+                <div class="input-prepend cursor-pointer" style="margin-bottom: 6px;">
+                  <span class="add-on"><i class="icon-calendar"></i></span>
+                  <%= f.text_field("start_time[date]", :id => "start_time_date", :maxlength => 20, :class => "datefield input-small", :value => (Clock.time + ConcertoConfig[:start_date_offset].to_i.days).strftime("%m/%d/%Y")) %>
+                </div>
+                <p>&nbsp;<a class="event-toggleTimeSelects" href="#"><%= t('.set_specific_times') %></a></p>
+                <div class="event-timeSelectDiv">
+                  <div class="input-prepend">
+                    <span class="add-on"><%= t(:at) %></span>
+                    <%= f.text_field("start_time[time]", :id => "start_time_time", :maxlength => 20, :class => "timefield input-small", :value => ConcertoConfig[:content_default_start_time]) %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="span6">
+            <div class="clearfix datetime">
+              <%= f.label :end_time, t('.valid_until') %>
+              <div class="input">
+                <div class="input-prepend cursor-pointer" style="margin-bottom: 6px;">
+                  <span class="add-on"><i class="icon-calendar"></i></span>
+                  <%= f.text_field("end_time[date]", :id => "end_time_date", :maxlength => 20, :class => "datefield input-small", :value => (Clock.time + ConcertoConfig[:default_content_run_time].to_i.days + ConcertoConfig[:start_date_offset].to_i.days).strftime("%m/%d/%Y")) %>
+                </div>
+                <div class="event-timeSelectDiv">
+                  <div class="input-prepend">
+                    <span class="add-on"><%= t(:at) %></span>
+                    <%= f.text_field("end_time[time]", :id => "end_time_time", :maxlength => 20, :class => "timefield input-small", :value => ConcertoConfig[:content_default_end_time]) %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-  <% end %>
 
-  <div class="field">
-    <%= f.label :start_time %><br />
-    <%= f.datetime_select :start_time %>
+
+    <div class="clearfix">
+      <div class="input checkbox">
+        <ul class="inputs-list">
+          <li><%= f.check_box :always %> <%= f.label :always %></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="clearfix">
+      <%= f.label :data %>
+      <div class="input">
+        <%= f.text_area :data %>
+      </div>
+    </div>
+
+  </fieldset>
+
+  <div class="submit_bar actions">
+    <%= f.submit button_text, :class => "btn btn-primary" %>
+    <%= link_to t(:cancel), (@schedule.persisted? ? schedule_path : schedules_path), :class => "btn" %>
   </div>
-  <div class="field">
-    <%= f.label :end_time %><br />
-    <%= f.datetime_select :end_time %>
-  </div>
-  <div class="field">
-    <%= f.label :data %><br />
-    <%= f.text_area :data %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
-  </div>
+
 <% end %>
+

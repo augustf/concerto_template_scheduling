@@ -28,7 +28,12 @@ module ConcertoTemplateScheduling
     # GET /schedules/new.json
     def new
       @schedule = Schedule.new
-  
+      if !params[:screen_id].nil?
+        # TODO: Error handling
+        @schedule.screen = Screen.find(params[:screen_id])
+      end
+      auth!
+
       respond_to do |format|
         format.html # new.html.erb
         format.json { render json: @schedule }
@@ -43,8 +48,7 @@ module ConcertoTemplateScheduling
     # POST /schedules
     # POST /schedules.json
     def create
-      @schedule = Schedule.new(params[:schedule])
-  
+      @schedule = Schedule.new(schedule_params)
       respond_to do |format|
         if @schedule.save
           format.html { redirect_to @schedule, notice: 'Schedule was successfully created.' }
@@ -82,6 +86,10 @@ module ConcertoTemplateScheduling
         format.html { redirect_to schedules_url }
         format.json { head :no_content }
       end
+    end
+
+    def schedule_params
+      params.require(:schedule).permit(:start_time, :end_time, :screen_id, :template_id, :always, :data)
     end
   end
 end

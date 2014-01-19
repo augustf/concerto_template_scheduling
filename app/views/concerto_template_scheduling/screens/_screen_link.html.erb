@@ -1,16 +1,16 @@
-<%# This partial will be read in the context of the main Concerto app.  %>
-<%# URL helpers require use of the 'hardware' routing helper.           %>
-<%# ConcertoHardware authorization rules are automatically provided.    %>
+<%# This partial will be read in the context of the main Concerto app.         %>
+<%# URL helpers require use of the 'template_scheduling' routing helper.       %>
+<%# ConcertoTemplateScheduling authorization rules are automatically provided. %>
 
 <section class="viewblock">
   <header class="viewblock-header">
     <div class="viewblock-header_right">
       <div class="button-padding">
         <% if @schedule.nil? %>
-          <%= link_to 'Add Template', template_scheduling.new_schedule_path(:screen_id => @screen.id), :class => "btn" %>
+          <%= link_to t('.add_schedule'), template_scheduling.new_schedule_path(:screen_id => @screen.id), :class => "btn" %>
         <% else %>
           <% if can? :update, @schedule %>
-            <%= link_to 'Edit Schedule', template_scheduling.edit_schedule_path(@schedule), :class => "btn" %>
+            <%= link_to t('.edit_schedule'), template_scheduling.edit_schedule_path(@schedule), :class => "btn" %>
           <% end %>
         <% end %>
       </div>
@@ -26,12 +26,9 @@
         <div class="alert alert-block alert-zero">
           <p class="alert-heading"><%= t('.no_templates_scheduled_header') %></p>
           <p><%= t('.no_templates_scheduled_msg') %></p>
-          <% if can? :update, @schedule %>
-            <%= link_to t('.add_schedule_msg'), template_scheduling.new_schedule_path(:screen_id => @screen.id) %>
-          <% end %>
         </div>
       <% else %>
-        <h3><%= @screen.name + " Schedule" %></h3>
+        <h3><%= @screen.name + ConcertoTemplateScheduling::Schedule.model_name.human %></h3>
         <br />
         <% if can? :read, @schedule %>
           <p><b>Start:</b> <%= @schedule.start_time %></p>
@@ -39,5 +36,12 @@
         <% end %>
       <% end %>
     </div>
+    <div class="default-padding">
+      <p><%= t('.footer') %></p>
+    </div>
   </div>
 </section>
+<!-- TODO: 
+  show effective template
+  allow previewing the screen with a selected template
+  -->

@@ -1,0 +1,34 @@
+en:
+  activerecord:
+    models:
+      concerto_template_scheduling/schedule: 'Schedule'
+    attributes:
+      concerto_template_scheduling/schedule:
+        start_time: 'Valid From'
+        end_time: 'Valid Until'
+        data: 'Schedule'
+        screen_id: 'Screen'
+        template_id: 'Template'
+        always: 'Always Display During the Valid Time Frame'
+
+  concerto_template_scheduling:
+    schedules:
+      new:
+        header: 'New Template Schedule for %{screen}'
+      edit:
+        header: 'Edit Template Schedule for %{screen}'
+      form:
+        provide_details: 'Provide Details'
+        valid_from: 'Valid From'
+        valid_until: 'Valid Until'
+        set_specific_times: 'Set specific times'
+
+    screens:
+      screen_link:
+        add_schedule: 'Add Schedule'
+        add_schedule_msg: 'Schedule a template for this screen.'
+        edit_schedule: 'Edit Schedule'
+        scheduled_templates: 'Scheduled Templates'
+        no_templates_scheduled_header: 'No Templates Scheduled'
+        no_templates_scheduled_msg: 'No templates have been scheduled for this screen.  The template assigned to the screen will be used.'
+        footer: 'Scheduled templates will prevail over the default template assigned to the screen.'

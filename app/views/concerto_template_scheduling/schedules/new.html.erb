@@ -1,5 +1,8 @@
-<h1>New schedule</h1>
-
-<%= render 'form' %>
-
-<%= link_to 'Back', schedules_path %>
+<section class="viewblock">
+  <header class="viewblock-header">
+    <h1 class="default-padding"><%= t('.header',  :screen => "#{@schedule.screen.name if !@schedule.screen.nil?}") %></h1>
+  </header>
+  <div class="viewblock-cont">
+    <%= render :partial => 'form', :locals => { :button_text => t(:create_model, :model => ConcertoTemplateScheduling::Schedule.model_name.human) } %>
+  </div>
+</section>
