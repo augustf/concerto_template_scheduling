@@ -6,9 +6,6 @@
 
     <%= f.hidden_field :screen_id %>
 
-    <!-- choose template -->
-
-
     <div class="row-fluid">
       <div class="span6">
         <div class="row-fluid">
@@ -51,23 +48,18 @@
       </div>
     </div>
 
-
     <div class="clearfix">
-      <div class="input checkbox">
-        <ul class="inputs-list">
-          <li><%= f.check_box :always %> <%= f.label :always %></li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="clearfix">
-      <%= f.label :data %>
+      <%= f.label :display_when %>
       <div class="input">
-        <%= f.text_area :data %>
+        <%= f.select :display_when, options_for_select(ConcertoTemplateScheduling::Schedule::DISPLAY_WHEN, @schedule.display_when) %>
       </div>
     </div>
+
+    <!-- TODO: ice cube scheduling, including a time span (for lunch menus, etc.) -->
 
   </fieldset>
+
+  <%= render :partial => 'screens/template_selection', :locals => { :f => f } %>
 
   <div class="submit_bar actions">
     <%= f.submit button_text, :class => "btn btn-primary" %>

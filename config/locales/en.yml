@@ -9,9 +9,13 @@ en:
         data: 'Schedule'
         screen_id: 'Screen'
         template_id: 'Template'
-        always: 'Always Display During the Valid Time Frame'
+        display_when: 'Display When'
 
   concerto_template_scheduling:
+    always: 'Always'
+    as_scheduled: 'As Scheduled'
+    never: 'Never'
+    
     schedules:
       new:
         header: 'New Template Schedule for %{screen}'
@@ -19,16 +23,20 @@ en:
         header: 'Edit Template Schedule for %{screen}'
       form:
         provide_details: 'Provide Details'
+        set_specific_times: 'Set specific times'
         valid_from: 'Valid From'
         valid_until: 'Valid Until'
-        set_specific_times: 'Set specific times'
+      show:
+        are_you_sure_delete: 'Are you sure you want to delete the scheduled template %{template} for the %{screen} screen?'
+        template_for_screen: '%{template} Template for %{screen} Screen'
 
     screens:
       screen_link:
-        add_schedule: 'Add Schedule'
+        add_schedule: 'Add'
         add_schedule_msg: 'Schedule a template for this screen.'
-        edit_schedule: 'Edit Schedule'
-        scheduled_templates: 'Scheduled Templates'
+        display: 'Display'
+        edit_schedule: 'Edit'
+        footer: 'Scheduled templates will prevail over the default template assigned to the screen.'
         no_templates_scheduled_header: 'No Templates Scheduled'
         no_templates_scheduled_msg: 'No templates have been scheduled for this screen.  The template assigned to the screen will be used.'
-        footer: 'Scheduled templates will prevail over the default template assigned to the screen.'
+        scheduled_templates: 'Scheduled Templates'

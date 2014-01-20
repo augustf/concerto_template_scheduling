@@ -6,12 +6,8 @@
   <header class="viewblock-header">
     <div class="viewblock-header_right">
       <div class="button-padding">
-        <% if @schedule.nil? %>
+        <% if can? :create, ConcertoTemplateScheduling::Schedule %>
           <%= link_to t('.add_schedule'), template_scheduling.new_schedule_path(:screen_id => @screen.id), :class => "btn" %>
-        <% else %>
-          <% if can? :update, @schedule %>
-            <%= link_to t('.edit_schedule'), template_scheduling.edit_schedule_path(@schedule), :class => "btn" %>
-          <% end %>
         <% end %>
       </div>
     </div>
@@ -21,21 +17,35 @@
     </div>
   </header>
   <div class="viewblock-cont">
-    <div class="default-padding">
-      <% if @schedule.nil? %>
+    <% if @schedules.nil? %>
+      <div class="default-padding">
         <div class="alert alert-block alert-zero">
           <p class="alert-heading"><%= t('.no_templates_scheduled_header') %></p>
           <p><%= t('.no_templates_scheduled_msg') %></p>
         </div>
-      <% else %>
-        <h3><%= @screen.name + ConcertoTemplateScheduling::Schedule.model_name.human %></h3>
-        <br />
-        <% if can? :read, @schedule %>
-          <p><b>Start:</b> <%= @schedule.start_time %></p>
-          <p><b>Stop:</b> <%= @schedule.end_time %></p>
-        <% end %>
+      </div>
+    <% else %>
+        <ul class="list-stacked">
+          <% @schedules.each do |schedule| %>
+            <% if can? :read, schedule %>
+              <li>
+                <% if can? :update, schedule %>
+                  <%= link_to t('.edit_schedule'), template_scheduling.edit_schedule_path(schedule), :class => "btn btn-small pull-right" %>
+                <% end %>
+
+                <h3><%= schedule.template.name %></h3>
+                <div>
+                  <%= image_tag main_app.preview_template_path(schedule.template, :height => 60, :format => :png), :style => "margin: 0px 1em 0px 0px;", :class => 'pull-left' %>
+                  <p><%= ConcertoTemplateScheduling::Schedule.human_attribute_name(:start_time)%>: <%= schedule.start_time %></p>
+                  <p><%= ConcertoTemplateScheduling::Schedule.human_attribute_name(:end_time)%>: <%= schedule.end_time %></p>
+                  <p><%= t('.display')%>: <b><%= ConcertoTemplateScheduling::Schedule::DISPLAY_WHEN.key(schedule.display_when.to_i) %></b></p>
+                </div>
+              </li>
+            <% end %>
+          <% end %>
+        </ul>
       <% end %>
-    </div>
+  
     <div class="default-padding">
       <p><%= t('.footer') %></p>
     </div>

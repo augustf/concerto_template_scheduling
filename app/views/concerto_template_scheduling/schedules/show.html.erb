@@ -1,20 +1,45 @@
-<p id="notice"><%= notice %></p>
+<section class="viewblock">
+  <header class="viewblock-header">
 
-<p>
-  <b>Start time:</b>
-  <%= @schedule.start_time %>
-</p>
+    <div class="viewblock-header_right">
+      <div class="button-padding">
+        <% if can? :update, @schedule %>
+          <%= link_to t(:edit_model, :model => ConcertoTemplateScheduling::Schedule.model_name.human), edit_schedule_path(@schedule), :class => "btn" %>
+        <% end %>
+        <% if can? :delete, @schedule %>
+          <%= link_to t(:destroy_model, :model => ConcertoTemplateScheduling::Schedule.model_name.human), @schedule, :data => { :confirm => t('.are_you_sure_delete', 
+            :template => @schedule.template.name, :screen => @schedule.screen.name) }, 
+            :method => :delete, :class => "btn" %>
+        <% end %>
+      </div>
+    </div>
 
-<p>
-  <b>End time:</b>
-  <%= @schedule.end_time %>
-</p>
+    <div class="default-padding">
+      <h1>
+        <%= link_to t(:all_model, :model => ConcertoTemplateScheduling::Schedule.model_name.human.pluralize), schedules_path %> &gt; 
+        <%= t('.template_for_screen', :template => @schedule.template.name, :screen =>@schedule.screen.name) %>
+      </h1>
+    </div>
 
-<p>
-  <b>Data:</b>
-  <%= @schedule.data %>
-</p>
+  </header>
+  <div class="viewblock-cont">
 
+    <div class="row-fluid">
+      <div class="span12">
+        <div class="default-padding">
+          <div class="subblock">
+            <div class="default-padding clearfix">
+              <p id="notice"><%= notice %></p>
+                  <%= image_tag main_app.preview_template_path(@schedule.template, :height => 200, :format => :png), :style => "margin: 0px 1em 0px 0px;" %>
 
-<%= link_to 'Edit', edit_schedule_path(@schedule) %> |
-<%= link_to 'Back', schedules_path %>
+                  <p><%= ConcertoTemplateScheduling::Schedule.human_attribute_name(:start_time)%>: <%= @schedule.start_time %></p>
+                  <p><%= ConcertoTemplateScheduling::Schedule.human_attribute_name(:end_time)%>: <%= @schedule.end_time %></p>
+                  <p><%= t('.display')%>: <b><%= ConcertoTemplateScheduling::Schedule::DISPLAY_WHEN.key(@schedule.display_when.to_i) %></b></p>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

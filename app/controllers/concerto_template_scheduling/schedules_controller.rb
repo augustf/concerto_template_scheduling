@@ -66,7 +66,7 @@ module ConcertoTemplateScheduling
       @schedule = Schedule.find(params[:id])
   
       respond_to do |format|
-        if @schedule.update_attributes(params[:schedule])
+        if @schedule.update_attributes(schedule_params)
           format.html { redirect_to @schedule, notice: 'Schedule was successfully updated.' }
           format.json { head :no_content }
         else
@@ -89,7 +89,7 @@ module ConcertoTemplateScheduling
     end
 
     def schedule_params
-      params.require(:schedule).permit(:start_time, :end_time, :screen_id, :template_id, :always, :data)
+      params.require(:schedule).permit(:start_time, :end_time, :screen_id, :template_id, :display_when, :data)
     end
   end
 end
