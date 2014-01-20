@@ -36,9 +36,10 @@
                 <h3><%= schedule.template.name %></h3>
                 <div>
                   <%= image_tag main_app.preview_template_path(schedule.template, :height => 60, :format => :png), :style => "margin: 0px 1em 0px 0px;", :class => 'pull-left' %>
-                  <p><%= ConcertoTemplateScheduling::Schedule.human_attribute_name(:start_time)%>: <%= schedule.start_time %></p>
-                  <p><%= ConcertoTemplateScheduling::Schedule.human_attribute_name(:end_time)%>: <%= schedule.end_time %></p>
-                  <p><%= t('.display')%>: <b><%= ConcertoTemplateScheduling::Schedule::DISPLAY_WHEN.key(schedule.display_when.to_i) %></b></p>
+                  <p><%= t('concerto_template_scheduling.valid') %>: <%= l(schedule.start_time.to_date, :format => :short) %> - <%= l(schedule.end_time.to_date, :format => :short) %></p>
+                  <p><%= t('.display')%>: <b><%= ConcertoTemplateScheduling::Schedule::DISPLAY_WHEN.key(schedule.config['display_when'].to_i) %></b></p>
+                  <p><%= t('concerto_template_scheduling.when') %>: <%= schedule.config['from_time'] %> - <%= schedule.config['to_time'] %></p>
+                  <p><%= t('concerto_template_scheduling.effective') %>: <b><%= schedule.is_effective? ? t(:yes) : t(:no) %></b></p>
                 </div>
               </li>
             <% end %>

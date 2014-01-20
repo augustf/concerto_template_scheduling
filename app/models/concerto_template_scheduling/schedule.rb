@@ -11,23 +11,34 @@ module ConcertoTemplateScheduling
     belongs_to :screen
     belongs_to :template
     
-    attr_accessor :display_when
     attr_accessor :config
-    attr_accessor :from_time
-    attr_accessor :to_time
 
     after_initialize :create_config
     after_find :load_config
     before_validation :save_config
 
     validates_associated :screen
-    validates_presence_of :screen, :message => 'must be selected'
+    validates_presence_of :screen, :message => I18n.t('concerto_template_scheduling.must_be_selected')
     # do not require uniqueness because the same template may be scheduled
     # for different time frames with different occurrence criteria
     # validates_uniqueness_of :template_id, :scope => :screen_id
 
     validates_associated :template
-    validates_presence_of :template, :message => 'must be selected'
+    validates_presence_of :template, :message => I18n.t('concerto_template_scheduling.must_be_selected')
+
+    validate :from_time_must_precede_to_time
+
+    def from_time_must_precede_to_time
+      if Time.parse(self.config['from_time']) > Time.parse(self.config['to_time'])
+        errors.add(:base, I18n.t('concerto_template_scheduling.from_time_must_precede_to_time'))
+      end
+    end
+
+    def self.form_attributes
+      attributes = [:screen_id, :template_id,  
+        {:start_time => [:time, :date]}, {:end_time => [:time, :date]}, 
+        {:config => [:display_when, :from_time, :to_time]}]
+    end
 
     # Specify the default configuration hash.
     # This will be used if a configuration doesn't exist.
@@ -44,11 +55,11 @@ module ConcertoTemplateScheduling
     # Create a new configuration hash if one does not already exist.
     # Called during `after_initialize`, where a config may or may not exist.
     def create_config
+      self.start_time ||= Clock.time + ConcertoConfig[:start_date_offset].to_i.days
+      self.end_time ||= Clock.time + ConcertoConfig[:start_date_offset].to_i.days + ConcertoConfig[:default_content_run_time].to_i.days
+
       self.config = {} if !self.config
       self.config = default_config().merge(self.config)
-      self.display_when = self.config['display_when']
-      self.from_time = self.config['from_time']
-      self.to_time = self.config['to_time']
       self.config
     end
 
@@ -63,7 +74,6 @@ module ConcertoTemplateScheduling
     # Compress the config hash back into JSON to be stored in the database.
     # Called during `before_validation`.
     def save_config
-      self.config['display_when'] = self.display_when
       self.data = JSON.dump(self.config)
     end
 
@@ -91,10 +101,20 @@ module ConcertoTemplateScheduling
     end
 
     def is_effective?
-      # if it is during the valid time frame
-      # TODO! complete
-      # and it is either marked as always
-      # or it falls within the schedule and it is between the from_time to_time
+      effective = false
+      if Clock.time >= self.start_time && Clock.time <= self.end_time
+        # if it is during the valid time frame
+        if self.config['display_when'].to_i == 1
+          # and it is either marked as always shown
+          # TODO! or meets the scheduled day criteria
+          if Clock.time >= Time.parse(self.config['from_time']) && Clock.time <= Time.parse(self.config['to_time'])
+            # and it is between the from_time to_time
+            effective = true
+          end
+        end
+      end
+
+      effective
     end
 
   end

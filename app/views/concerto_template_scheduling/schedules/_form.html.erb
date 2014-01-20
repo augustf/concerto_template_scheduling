@@ -11,17 +11,17 @@
         <div class="row-fluid">
           <div class="span6">
             <div class="clearfix datetime">
-              <%= f.label :start_time, t('.valid_from') %>
+              <%= label_tooltip "schedule", :start_time, t('.valid_from'), :tip => t('.valid_tip') %>
               <div class="input">
                 <div class="input-prepend cursor-pointer" style="margin-bottom: 6px;">
                   <span class="add-on"><i class="icon-calendar"></i></span>
-                  <%= f.text_field("start_time[date]", :id => "start_time_date", :maxlength => 20, :class => "datefield input-small", :value => (Clock.time + ConcertoConfig[:start_date_offset].to_i.days).strftime("%m/%d/%Y")) %>
+                  <%= f.text_field("start_time[date]", :id => "start_time_date", :maxlength => 20, :class => "datefield input-small", :value => @schedule.start_time.strftime("%m/%d/%Y")) %>
                 </div>
                 <p>&nbsp;<a class="event-toggleTimeSelects" href="#"><%= t('.set_specific_times') %></a></p>
                 <div class="event-timeSelectDiv">
                   <div class="input-prepend">
                     <span class="add-on"><%= t(:at) %></span>
-                    <%= f.text_field("start_time[time]", :id => "start_time_time", :maxlength => 20, :class => "timefield input-small", :value => ConcertoConfig[:content_default_start_time]) %>
+                    <%= f.text_field("start_time[time]", :id => "start_time_time", :maxlength => 20, :class => "timefield input-small", :value => @schedule.start_time.strftime("%l:%M%P")) %>
                   </div>
                 </div>
               </div>
@@ -33,12 +33,12 @@
               <div class="input">
                 <div class="input-prepend cursor-pointer" style="margin-bottom: 6px;">
                   <span class="add-on"><i class="icon-calendar"></i></span>
-                  <%= f.text_field("end_time[date]", :id => "end_time_date", :maxlength => 20, :class => "datefield input-small", :value => (Clock.time + ConcertoConfig[:default_content_run_time].to_i.days + ConcertoConfig[:start_date_offset].to_i.days).strftime("%m/%d/%Y")) %>
+                  <%= f.text_field("end_time[date]", :id => "end_time_date", :maxlength => 20, :class => "datefield input-small", :value => @schedule.end_time.strftime("%m/%d/%Y")) %>
                 </div>
                 <div class="event-timeSelectDiv">
                   <div class="input-prepend">
                     <span class="add-on"><%= t(:at) %></span>
-                    <%= f.text_field("end_time[time]", :id => "end_time_time", :maxlength => 20, :class => "timefield input-small", :value => ConcertoConfig[:content_default_end_time]) %>
+                    <%= f.text_field("end_time[time]", :id => "end_time_time", :maxlength => 20, :class => "timefield input-small", :value => @schedule.end_time.strftime("%l:%M%P")) %>
                   </div>
                 </div>
               </div>
@@ -48,41 +48,42 @@
       </div>
     </div>
 
-    <div class="clearfix">
-      <%= f.label :display_when %>
-      <div class="input">
-        <%= f.select :display_when, options_for_select(ConcertoTemplateScheduling::Schedule::DISPLAY_WHEN, @schedule.display_when) %>
+    <%= f.fields_for :config do |config| %>
+      <div class="clearfix">
+        <%= label_tooltip "schedule", :display_when, ConcertoTemplateScheduling::Schedule.human_attribute_name(:display_when), :tip => t('.display_when_tip') %>
+        <div class="input">
+          <%= config.select :display_when, options_for_select(ConcertoTemplateScheduling::Schedule::DISPLAY_WHEN, @schedule.config['display_when']) %>
+        </div>
       </div>
-    </div>
 
-    <!-- TODO: ice cube scheduling, including a time span (for lunch menus, etc.) -->
+      <!-- TODO: ice cube scheduling, including a time span (for lunch menus, etc.) -->
 
 
-    <div class="row-fluid">
-      <div class="span6">
-        <div class="row-fluid">
-          <div class="span6">
-            <div class="clearfix datetime">
-              <%= f.label :from_time %>
-              <div class="input-prepend">
-                <span class="add-on"><%= t(:at) %></span>
-                <%= f.text_field(:from_time, :maxlength => 20, :class => "timefield input-small", :value => @schedule.from_time) %>
+      <div class="row-fluid">
+        <div class="span6">
+          <div class="row-fluid">
+            <div class="span6">
+              <div class="clearfix datetime">
+                <%= label_tooltip "schedule", :from_time, ConcertoTemplateScheduling::Schedule.human_attribute_name(:from_time), :tip => t('.times_tip') %>
+                <div class="input-prepend">
+                  <span class="add-on"><%= t(:at) %></span>
+                  <%= config.text_field(:from_time, :maxlength => 20, :class => "timefield input-small", :value => @schedule.config['from_time']) %>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="span6">
-            <div class="clearfix datetime">
-              <%= f.label :to_time %>
-              <div class="input-prepend">
-                <span class="add-on"><%= t(:at) %></span>
-                <%= f.text_field(:to_time, :maxlength => 20, :class => "timefield input-small", :value => @schedule.to_time) %>
+            <div class="span6">
+              <div class="clearfix datetime">
+                <%= f.label :to_time %>
+                <div class="input-prepend">
+                  <span class="add-on"><%= t(:at) %></span>
+                  <%= config.text_field(:to_time, :maxlength => 20, :class => "timefield input-small", :value => @schedule.config['to_time']) %>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-
+    <% end %>
   </fieldset>
 
   <%= render :partial => 'screens/template_selection', :locals => { :f => f } %>

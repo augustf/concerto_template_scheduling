@@ -9,6 +9,7 @@
     </h1>
   </header>
   <div class="viewblock-cont">
+    <% if !@schedules.empty? %>
     <table>
       <thead>
         <tr>
@@ -29,11 +30,15 @@
               <%= image_tag main_app.preview_template_path(schedule.template, :height => 60, :format => :png), :style => "margin: 0px;" %>
             </td>
             <td>
-              <%= ConcertoTemplateScheduling::Schedule.human_attribute_name(:start_time)%>: <%= schedule.start_time %><br/>
-              <%= ConcertoTemplateScheduling::Schedule.human_attribute_name(:end_time)%>: <%= schedule.end_time %><br/>
-              <b><%= ConcertoTemplateScheduling::Schedule::DISPLAY_WHEN.key(schedule.display_when.to_i) %></b>
+              <%= ConcertoTemplateScheduling::Schedule.human_attribute_name(:start_time)%>: <%= l(schedule.start_time, :format => :long) %><br/>
+              <%= ConcertoTemplateScheduling::Schedule.human_attribute_name(:end_time)%>: <%= l(schedule.end_time, :format => :long) %><br/>
+              <%= t('concerto_template_scheduling.effective') %>: <b><%= schedule.is_effective? ? t(:yes) : t(:no) %></b>
             </td>
-            <td><%= schedule.data %></td>
+            <td>
+              <b><%= ConcertoTemplateScheduling::Schedule::DISPLAY_WHEN.key(schedule.config['display_when'].to_i) %></b><br/>
+              <%= ConcertoTemplateScheduling::Schedule.human_attribute_name(:from_time)%>: <%= schedule.config['from_time'] %><br/>
+              <%= ConcertoTemplateScheduling::Schedule.human_attribute_name(:to_time)%>: <%= schedule.config['to_time'] %><br/>
+            </td>
             <td>
               <% if can? :read, schedule %>
                 <%= link_to t(:show, :model => ConcertoTemplateScheduling::Schedule.model_name.human), schedule, :class => "btn" %>
@@ -50,5 +55,13 @@
         <% end %>
       </tbody>
     </table>
+    <% else %>
+      <div class="default-padding">
+        <div class="alert alert-block alert-zero">
+          <p class="alert-heading"><%= t('.no_templates_scheduled_header') %></p>
+          <p><%= t('.no_templates_scheduled_msg') %></p>
+        </div>
+      </div>
+    <%end %>
   </div>
 </section>

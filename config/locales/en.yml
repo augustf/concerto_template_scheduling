@@ -9,24 +9,37 @@ en:
         data: 'Schedule'
         screen_id: 'Screen'
         template_id: 'Template'
-        display_when: 'Display When'
+        display_when: 'Display On Days'
+        from_time: 'From Time'
+        to_time: 'To Time'
 
   concerto_template_scheduling:
-    always: 'Always'
+    always: 'Everyday'
     are_you_sure_delete: 'Are you sure you want to delete the scheduled template %{template} for the %{screen} screen?'
     as_scheduled: 'As Scheduled'
-    never: 'Never'
-    
+    effective: 'Currently in Effect? '
+    never: 'None'
+    from_time_must_precede_to_time: "'From Time' must precede 'To Time'"
+    must_be_selected: 'must be selected'
+    valid: 'Valid'
+    when: 'When'
+
     schedules:
-      new:
-        header: 'New Template Schedule for %{screen}'
       edit:
         header: 'Edit Template Schedule for %{screen}'
       form:
+        display_when_tip: 'You can specify that the template will never be displayed (effectively turning it "off"), will be used every day, or will be used on the dates specified in the scheduling criteria.'
         provide_details: 'Provide Details'
         set_specific_times: 'Set specific times'
+        times_tip: "This is the window during each qualified day that the template will be used."
         valid_from: 'Valid From'
         valid_until: 'Valid Until'
+        valid_tip: "Valid dates determine when a template could be displayed, providing that the 'Display When' criteria is met."
+      index:
+        no_templates_scheduled_header: 'No Templates Have Been Scheduled For Any Screens'
+        no_templates_scheduled_msg: "Templates can be scheduled from each screen's detail page."
+      new:
+        header: 'New Template Schedule for %{screen}'
       show:
         template_for_screen: '%{template} Template for %{screen} Screen'
 
