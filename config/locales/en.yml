@@ -13,6 +13,7 @@ en:
 
   concerto_template_scheduling:
     always: 'Always'
+    are_you_sure_delete: 'Are you sure you want to delete the scheduled template %{template} for the %{screen} screen?'
     as_scheduled: 'As Scheduled'
     never: 'Never'
     
@@ -27,7 +28,6 @@ en:
         valid_from: 'Valid From'
         valid_until: 'Valid Until'
       show:
-        are_you_sure_delete: 'Are you sure you want to delete the scheduled template %{template} for the %{screen} screen?'
         template_for_screen: '%{template} Template for %{screen} Screen'
 
     screens:

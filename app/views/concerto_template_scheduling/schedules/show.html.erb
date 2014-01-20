@@ -7,7 +7,7 @@
           <%= link_to t(:edit_model, :model => ConcertoTemplateScheduling::Schedule.model_name.human), edit_schedule_path(@schedule), :class => "btn" %>
         <% end %>
         <% if can? :delete, @schedule %>
-          <%= link_to t(:destroy_model, :model => ConcertoTemplateScheduling::Schedule.model_name.human), @schedule, :data => { :confirm => t('.are_you_sure_delete', 
+          <%= link_to t(:destroy_model, :model => ConcertoTemplateScheduling::Schedule.model_name.human), @schedule, :data => { :confirm => t('concerto_template_scheduling.are_you_sure_delete', 
             :template => @schedule.template.name, :screen => @schedule.screen.name) }, 
             :method => :delete, :class => "btn" %>
         <% end %>

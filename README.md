@@ -11,3 +11,9 @@ To create the proper migrations, run:
 ```
 rails generate concerto_template_scheduling
 ```
+
+# TODO
+Search for TODOs and finish them.
+integrate ice_cube
+hook into concerto
+cancan ability model (see hardware)
