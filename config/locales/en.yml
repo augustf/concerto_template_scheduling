@@ -36,7 +36,7 @@ en:
         add_schedule_msg: 'Schedule a template for this screen.'
         display: 'Display'
         edit_schedule: 'Edit'
-        footer: 'Scheduled templates will prevail over the default template assigned to the screen.'
+        footer: 'Scheduled templates will prevail over the default template assigned to the screen.  If multiple templates are effective at the same time one will be arbitrarily chosen.'
         no_templates_scheduled_header: 'No Templates Scheduled'
         no_templates_scheduled_msg: 'No templates have been scheduled for this screen.  The template assigned to the screen will be used.'
         scheduled_templates: 'Scheduled Templates'

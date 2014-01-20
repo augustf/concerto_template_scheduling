@@ -57,6 +57,32 @@
 
     <!-- TODO: ice cube scheduling, including a time span (for lunch menus, etc.) -->
 
+
+    <div class="row-fluid">
+      <div class="span6">
+        <div class="row-fluid">
+          <div class="span6">
+            <div class="clearfix datetime">
+              <%= f.label :from_time %>
+              <div class="input-prepend">
+                <span class="add-on"><%= t(:at) %></span>
+                <%= f.text_field(:from_time, :maxlength => 20, :class => "timefield input-small", :value => @schedule.from_time) %>
+              </div>
+            </div>
+          </div>
+          <div class="span6">
+            <div class="clearfix datetime">
+              <%= f.label :to_time %>
+              <div class="input-prepend">
+                <span class="add-on"><%= t(:at) %></span>
+                <%= f.text_field(:to_time, :maxlength => 20, :class => "timefield input-small", :value => @schedule.to_time) %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </fieldset>
 
   <%= render :partial => 'screens/template_selection', :locals => { :f => f } %>

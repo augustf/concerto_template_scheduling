@@ -89,7 +89,8 @@ module ConcertoTemplateScheduling
     end
 
     def schedule_params
-      params.require(:schedule).permit(:start_time, :end_time, :screen_id, :template_id, :display_when, :data)
+      attributes = [:screen_id, :template_id, :display_when, :data, {:start_time => [:time, :date]}, {:end_time => [:time, :date]}, :from_time, :to_time]
+      params.require(:schedule).permit(*attributes)
     end
   end
 end

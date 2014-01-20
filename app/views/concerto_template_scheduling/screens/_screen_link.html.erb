@@ -17,7 +17,7 @@
     </div>
   </header>
   <div class="viewblock-cont">
-    <% if @schedules.nil? %>
+    <% if @schedules.empty? %>
       <div class="default-padding">
         <div class="alert alert-block alert-zero">
           <p class="alert-heading"><%= t('.no_templates_scheduled_header') %></p>
@@ -44,11 +44,10 @@
             <% end %>
           <% end %>
         </ul>
+        <div class="default-padding">
+          <p><%= t('.footer') %></p>
+        </div>
       <% end %>
-  
-    <div class="default-padding">
-      <p><%= t('.footer') %></p>
-    </div>
   </div>
 </section>
 <!-- TODO: 
