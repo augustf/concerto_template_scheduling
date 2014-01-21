@@ -22,6 +22,8 @@ module ConcertoTemplateScheduling
 
         add_controller_hook "ScreensController", :show, :before do
           @schedules = Schedule.where(:screen_id => @screen.id)
+          # reject the schedules that specify templates that have been deleted
+          @schedules.reject!{|s| s.template.nil?}
         end
 
         add_view_hook "ScreensController", :screen_details, :partial => "concerto_template_scheduling/screens/screen_link"

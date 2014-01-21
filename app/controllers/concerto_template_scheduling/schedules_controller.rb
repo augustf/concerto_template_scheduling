@@ -9,7 +9,9 @@ module ConcertoTemplateScheduling
     # GET /schedules.json
     def index
       @schedules = Schedule.all
-      @schedules.reject! { |s| !can?(:read, s.screen) }
+      # ignore the schedules that belong to screens we cant read
+      # or schedules where the template has been deleted
+      @schedules.reject! { |s| !can?(:read, s.screen) || s.template.nil? }
   
       respond_to do |format|
         format.html # index.html.erb

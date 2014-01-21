@@ -102,8 +102,8 @@ module ConcertoTemplateScheduling
 
     def is_effective?
       effective = false
-      if Clock.time >= self.start_time && Clock.time <= self.end_time
-        # if it is during the valid time frame
+      if Clock.time >= self.start_time && Clock.time <= self.end_time && !self.template.nil?
+        # if it is during the valid time frame and the template is still valid
         if self.config['display_when'].to_i == 1
           # and it is either marked as always shown
           # TODO! or meets the scheduled day criteria
