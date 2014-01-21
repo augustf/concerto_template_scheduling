@@ -2,10 +2,16 @@ module ConcertoTemplateScheduling
   class Schedule < ActiveRecord::Base
     include ActiveModel::ForbiddenAttributesProtection
 
+    DISPLAY_NEVER=0
+    DISPLAY_ALWAYS=1
+    DISPLAY_AS_SCHEDULED=2
+    DISPLAY_CONTENT_EXISTS=3
+
     DISPLAY_WHEN = {
-      I18n.t('concerto_template_scheduling.never') => 0, 
-      I18n.t('concerto_template_scheduling.always') => 1, 
-      I18n.t('concerto_template_scheduling.as_scheduled') => 2
+      I18n.t('concerto_template_scheduling.never') => DISPLAY_NEVER, 
+      I18n.t('concerto_template_scheduling.always') => DISPLAY_ALWAYS, 
+      I18n.t('concerto_template_scheduling.as_scheduled') => DISPLAY_AS_SCHEDULED,
+      I18n.t('concerto_template_scheduling.content_exists') => DISPLAY_CONTENT_EXISTS
     }
 
     belongs_to :screen
@@ -34,6 +40,10 @@ module ConcertoTemplateScheduling
       end
     end
 
+    def self.active
+      where("start_time < :now AND end_time > :now", {:now => Clock.time})
+    end
+
     def self.form_attributes
       attributes = [:screen_id, :template_id,  
         {:start_time => [:time, :date]}, {:end_time => [:time, :date]}, 
@@ -46,7 +56,7 @@ module ConcertoTemplateScheduling
     # @return [Hash{String => String, Number}] configuration hash.
     def default_config
       {
-        'display_when' => 1,
+        'display_when' => DISPLAY_ALWAYS,
         'from_time' => '12:00am',
         'to_time' => '11:59pm'
       }
@@ -102,13 +112,14 @@ module ConcertoTemplateScheduling
 
     def is_effective?
       effective = false
+
+      # if it is during the valid/active time frame and the template still exists
       if Clock.time >= self.start_time && Clock.time <= self.end_time && !self.template.nil?
-        # if it is during the valid time frame and the template is still valid
-        if self.config['display_when'].to_i == 1
-          # and it is either marked as always shown
-          # TODO! or meets the scheduled day criteria
+        # and it is either marked as always shown
+        # TODO! or meets the scheduled day criteria or we detect content on the specified feed
+        if self.config['display_when'].to_i == DISPLAY_ALWAYS
+          # and it is between the from_time to_time for the day
           if Clock.time >= Time.parse(self.config['from_time']) && Clock.time <= Time.parse(self.config['to_time'])
-            # and it is between the from_time to_time
             effective = true
           end
         end
