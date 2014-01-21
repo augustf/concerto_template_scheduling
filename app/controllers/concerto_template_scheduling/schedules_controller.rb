@@ -2,10 +2,14 @@ require_dependency "concerto_template_scheduling/application_controller"
 
 module ConcertoTemplateScheduling
   class SchedulesController < ApplicationController
+    # since scheduled templates are basically an extended feature of a screen
+    # if the user can update the screen then they can crud scheduled templates
+
     # GET /schedules
     # GET /schedules.json
     def index
       @schedules = Schedule.all
+      @schedules.reject! { |s| !can?(:read, s.screen) }
   
       respond_to do |format|
         format.html # index.html.erb
@@ -17,7 +21,8 @@ module ConcertoTemplateScheduling
     # GET /schedules/1.json
     def show
       @schedule = Schedule.find(params[:id])
-  
+      auth! :action => :read, :object => @schedule.screen
+
       respond_to do |format|
         format.html # show.html.erb
         format.json { render json: @schedule }
@@ -32,7 +37,7 @@ module ConcertoTemplateScheduling
         # TODO: Error handling
         @schedule.screen = Screen.find(params[:screen_id])
       end
-      auth!
+      auth! :action => :update, :object => @schedule.screen
 
       respond_to do |format|
         format.html # new.html.erb
@@ -43,12 +48,14 @@ module ConcertoTemplateScheduling
     # GET /schedules/1/edit
     def edit
       @schedule = Schedule.find(params[:id])
+      auth! :action => :update, :object => @schedule.screen
     end
   
     # POST /schedules
     # POST /schedules.json
     def create
       @schedule = Schedule.new(schedule_params)
+      auth! :action => :update, :object => @schedule.screen
       respond_to do |format|
         if @schedule.save
           format.html { redirect_to @schedule, notice: 'Schedule was successfully created.' }
@@ -64,7 +71,8 @@ module ConcertoTemplateScheduling
     # PUT /schedules/1.json
     def update
       @schedule = Schedule.find(params[:id])
-  
+      auth! :action => :update, :object => @schedule.screen
+
       respond_to do |format|
         if @schedule.update_attributes(schedule_params)
           format.html { redirect_to @schedule, notice: 'Schedule was successfully updated.' }
@@ -80,6 +88,7 @@ module ConcertoTemplateScheduling
     # DELETE /schedules/1.json
     def destroy
       @schedule = Schedule.find(params[:id])
+      auth! :action => :update, :object => @schedule.screen
       @schedule.destroy
   
       respond_to do |format|

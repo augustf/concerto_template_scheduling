@@ -1,12 +1,8 @@
-<%# This partial will be read in the context of the main Concerto app.         %>
-<%# URL helpers require use of the 'template_scheduling' routing helper.       %>
-<%# ConcertoTemplateScheduling authorization rules are automatically provided. %>
-
 <section class="viewblock">
   <header class="viewblock-header">
     <div class="viewblock-header_right">
       <div class="button-padding">
-        <% if can? :create, ConcertoTemplateScheduling::Schedule %>
+        <% if can? :update, @screen %>
           <%= link_to t('.add_schedule'), template_scheduling.new_schedule_path(:screen_id => @screen.id), :class => "btn" %>
         <% end %>
       </div>
@@ -27,9 +23,9 @@
     <% else %>
         <ul class="list-stacked">
           <% @schedules.each do |schedule| %>
-            <% if can? :read, schedule %>
+            <% if can? :read, schedule.screen %>
               <li>
-                <% if can? :update, schedule %>
+                <% if can? :update, schedule.screen %>
                   <%= link_to t('.edit_schedule'), template_scheduling.edit_schedule_path(schedule), :class => "btn btn-small pull-right" %>
                 <% end %>
 
@@ -52,6 +48,5 @@
   </div>
 </section>
 <!-- TODO: 
-  show effective template
   allow previewing the screen with a selected template
   -->

@@ -24,9 +24,13 @@
       <tbody>
         <% @schedules.each do |schedule| %>
           <tr>
-            <td><%= schedule.screen.name %></td>
+            <td><%= link_to schedule.screen.name, main_app.screen_path(schedule.screen) %></td>
             <td>
-              <%= schedule.template.name %><br/>
+              <% if can?(:read, schedule.template) %>
+                <%= link_to schedule.template.name, main_app.template_path(schedule.template) %>
+              <% else %>
+                <%= schedule.template.name %>
+                <% end %><br/>
               <%= image_tag main_app.preview_template_path(schedule.template, :height => 60, :format => :png), :style => "margin: 0px;" %>
             </td>
             <td>
