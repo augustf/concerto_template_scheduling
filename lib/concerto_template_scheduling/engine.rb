@@ -35,6 +35,15 @@ module ConcertoTemplateScheduling
 
         add_view_hook "TemplatesController", :template_details, :partial => "concerto_template_scheduling/templates/in_use_by"
 
+
+        add_controller_hook "Screen", :effective_template, :before do
+          # self is the screen model instance
+          if @template.nil?
+            schedules = Schedule.active.where(:screen_id => self.id)
+            schedules.reject! {|s| !s.is_effective? }
+            @template = schedules.first.template if !schedules.empty?
+          end
+        end
       end
     end
   end
