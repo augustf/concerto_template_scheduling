@@ -1,3 +1,5 @@
+<%= javascript_include_tag "concerto_template_scheduling/application" %>
+
 <%= form_for(@schedule) do |f| %>
   <%= render :partial => "layouts/errors", :object => @schedule %>
 
@@ -50,14 +52,26 @@
 
     <%= f.fields_for :config do |config| %>
       <div class="clearfix">
-        <%= label_tooltip "schedule", :display_when, ConcertoTemplateScheduling::Schedule.human_attribute_name(:display_when), :tip => t('.display_when_tip') %>
+        <%= label_tooltip "schedule", 'config_display_when', ConcertoTemplateScheduling::Schedule.human_attribute_name(:display_when), :tip => t('.display_when_tip') %>
         <div class="input">
           <%= config.select :display_when, options_for_select(ConcertoTemplateScheduling::Schedule::DISPLAY_WHEN, @schedule.config['display_when']) %>
         </div>
       </div>
 
-      <!-- TODO: ice cube scheduling, including a time span (for lunch menus, etc.) -->
+      <div class="clearfix" id="feed_selection">
+        <%= config.label :feed_id %>
+        <div class="input">
+          <%= config.select :feed_id, options_from_collection_for_select(@schedule.selectable_feeds, :id, :name, @schedule.config['feed_id']) %>
+        </div>
+      </div>
 
+      <!-- TODO: ice cube scheduling -->
+      <div class="clearfix" id="scheduling_criteria">
+        <%= config.label :scheduling_criteria, ConcertoTemplateScheduling::Schedule.human_attribute_name(:scheduling_criteria) %>
+        <div class="input">
+          <%= config.text_area :scheduling_criteria %>
+        </div>
+      </div>
 
       <div class="row-fluid">
         <div class="span6">

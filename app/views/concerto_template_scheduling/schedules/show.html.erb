@@ -33,7 +33,13 @@
 
                   <p><%= ConcertoTemplateScheduling::Schedule.human_attribute_name(:start_time)%>: <%= l(@schedule.start_time, :format => :long) %></p>
                   <p><%= ConcertoTemplateScheduling::Schedule.human_attribute_name(:end_time)%>: <%= l(@schedule.end_time, :format => :long) %></p>
-                  <p><%= t('.display')%>: <b><%= ConcertoTemplateScheduling::Schedule::DISPLAY_WHEN.key(@schedule.config['display_when'].to_i) %></b></p>
+                  <p><%= t('concerto_template_scheduling.when')%>: <b><%= ConcertoTemplateScheduling::Schedule::DISPLAY_WHEN.key(@schedule.config['display_when'].to_i) %></b></p>
+                  <% if @schedule.config['display_when'].to_i == ConcertoTemplateScheduling::Schedule::DISPLAY_CONTENT_EXISTS %>
+                    <% feed = Feed.find(@schedule.config['feed_id'].to_i)
+                       feed_name = (feed.blank? ? 'Invalid Feed' : feed.name)
+                    %>
+                    <p><%= t(:feed) %>: <%= feed_name %></p>
+                  <% end %>
                   <p><%= ConcertoTemplateScheduling::Schedule.human_attribute_name(:from_time)%>: <%= @schedule.config['from_time'] %></p>
                   <p><%= ConcertoTemplateScheduling::Schedule.human_attribute_name(:to_time)%>: <%= @schedule.config['to_time'] %></p>
 

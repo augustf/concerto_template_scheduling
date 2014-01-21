@@ -12,11 +12,13 @@ en:
         display_when: 'Use Template When'
         from_time: 'From Time'
         to_time: 'Until Time'
+        scheduling_criteria: 'Scheduling Criteria'
 
   concerto_template_scheduling:
     always: 'Everyday'
     are_you_sure_delete: 'Are you sure you want to delete the scheduled template %{template} for the %{screen} screen?'
     as_scheduled: 'As Scheduled'
+    content_exists: 'Content Exists on Feed'
     effective: 'Currently in Effect? '
     never: 'Never'
     from_time_must_precede_to_time: "'From Time' must precede 'To Time'"
@@ -28,7 +30,7 @@ en:
       edit:
         header: 'Edit Template Schedule for %{screen}'
       form:
-        display_when_tip: 'You can specify that the template will never be used (effectively turning it "off"), will be used every day, or will be used on the dates specified by the scheduling criteria (yet to be implemented).'
+        display_when_tip: 'You can specify that the template will never be used (effectively turning it "off"), will be used every day, will be used on the dates specified by the scheduling criteria (yet to be implemented), or will be used when content has been detected on a specific feed.'
         provide_details: 'Provide Details'
         set_specific_times: 'Set specific times'
         times_tip: "This is the window during each qualified day that the template will be shown."
@@ -49,7 +51,7 @@ en:
         add_schedule_msg: 'Schedule a template for this screen.'
         display: 'Display'
         edit_schedule: 'Edit'
-        footer: 'Scheduled templates will prevail over the default template assigned to the screen.  If multiple templates are effective at the same time one will be arbitrarily chosen.'
+        footer: 'Scheduled templates will prevail over the default template assigned to the screen.  If multiple scheduled templates are active at the same time one will be arbitrarily chosen.'
         no_templates_scheduled_header: 'No Templates Scheduled'
         no_templates_scheduled_msg: 'No templates have been scheduled for this screen.  The template assigned to the screen will be used.'
         scheduled_templates: 'Scheduled Templates'

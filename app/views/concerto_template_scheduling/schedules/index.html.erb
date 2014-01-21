@@ -40,7 +40,15 @@
             </td>
             <td>
               <b><%= ConcertoTemplateScheduling::Schedule::DISPLAY_WHEN.key(schedule.config['display_when'].to_i) %></b><br/>
-              <% if schedule.config['display_when'].to_i != 0 %>
+              <% if schedule.config['display_when'].to_i == ConcertoTemplateScheduling::Schedule::DISPLAY_CONTENT_EXISTS %>
+                <% if can? :read, schedule.feed %>
+                  <%= link_to schedule.feed.name, main_app.feed_path(schedule.feed) %><br/>
+                <% else %>
+                  <%= schedule.feed.name %><br/>
+                <% end %>
+              <% end %>
+
+              <% if schedule.config['display_when'].to_i != ConcertoTemplateScheduling::Schedule::DISPLAY_NEVER %>
                 <%= schedule.config['from_time'] %> - <%= schedule.config['to_time'] %><br/>
               <% end %>
             </td>

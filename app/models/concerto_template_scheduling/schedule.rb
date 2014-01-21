@@ -47,7 +47,7 @@ module ConcertoTemplateScheduling
     def self.form_attributes
       attributes = [:screen_id, :template_id,  
         {:start_time => [:time, :date]}, {:end_time => [:time, :date]}, 
-        {:config => [:display_when, :from_time, :to_time]}]
+        {:config => [:display_when, :from_time, :to_time, :feed_id, :scheduling_criteria]}]
     end
 
     # Specify the default configuration hash.
@@ -115,17 +115,38 @@ module ConcertoTemplateScheduling
 
       # if it is during the valid/active time frame and the template still exists
       if Clock.time >= self.start_time && Clock.time <= self.end_time && !self.template.nil?
-        # and it is either marked as always shown
-        # TODO! or meets the scheduled day criteria or we detect content on the specified feed
-        if self.config['display_when'].to_i == DISPLAY_ALWAYS
-          # and it is between the from_time to_time for the day
-          if Clock.time >= Time.parse(self.config['from_time']) && Clock.time <= Time.parse(self.config['to_time'])
+        # and it is within the viewing window for the day
+        if Clock.time >= Time.parse(self.config['from_time']) && Clock.time <= Time.parse(self.config['to_time'])
+          # and it is either marked as always shown
+          if self.config['display_when'].to_i == DISPLAY_ALWAYS
             effective = true
+          elsif self.config['display_when'].to_i == DISPLAY_CONTENT_EXISTS
+            # or if we detect actual content on the specified feed
+            if !self.feed.nil? && !self.feed.approved_contents.active.where('kind_id != 4').empty?
+              effective = true
+            end
+          else
+            # TODO: if it meets the scheduled day criteria 
           end
         end
       end
 
       effective
+    end
+
+    def feed
+      if self.config.include?('feed_id')
+        f = Feed.find(self.config['feed_id'].to_i)
+      end
+      f
+    end
+
+    def selectable_feeds
+      if !self.screen.nil?
+        feeds = Feed.all
+        ability = Ability.new(self.screen)
+        feeds.reject { |feed| !ability.can?(:read, feed) }
+      end
     end
 
   end
