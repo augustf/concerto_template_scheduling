@@ -29,7 +29,7 @@ module ConcertoTemplateScheduling
     validate :from_time_must_precede_to_time
 
     def from_time_must_precede_to_time
-      if Time.parse(self.config['from_time']) > Time.parse(self.config['to_time'])
+      if Time.zone.parse(self.config['from_time']) > Time.zone.parse(self.config['to_time'])
         errors.add(:base, I18n.t('concerto_template_scheduling.from_time_must_precede_to_time'))
       end
     end
@@ -55,8 +55,8 @@ module ConcertoTemplateScheduling
     # Create a new configuration hash if one does not already exist.
     # Called during `after_initialize`, where a config may or may not exist.
     def create_config
-      self.start_time ||= Clock.time + ConcertoConfig[:start_date_offset].to_i.days
-      self.end_time ||= Clock.time + ConcertoConfig[:start_date_offset].to_i.days + ConcertoConfig[:default_content_run_time].to_i.days
+      self.start_time ||= Time.zone.parse("12:00am", Clock.time + ConcertoConfig[:start_date_offset].to_i.days)
+      self.end_time ||= Time.zone.parse("11:59pm", Clock.time + ConcertoConfig[:start_date_offset].to_i.days + ConcertoConfig[:default_content_run_time].to_i.days)
 
       self.config = {} if !self.config
       self.config = default_config().merge(self.config)

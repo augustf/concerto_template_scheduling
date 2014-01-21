@@ -11,7 +11,7 @@ en:
         template_id: 'Template'
         display_when: 'Display On Days'
         from_time: 'From Time'
-        to_time: 'To Time'
+        to_time: 'Until Time'
 
   concerto_template_scheduling:
     always: 'Everyday'
