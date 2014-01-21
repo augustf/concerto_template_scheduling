@@ -1,0 +1,11 @@
+<% if !@schedules.empty? %>
+  <p><%= t('scheduled_for_the_following_screens') %>:
+    <ul>
+      <% @schedules.each do |schedule| %>
+        <% if can? :read, schedule.screen %>
+            <li><%= link_to schedule.screen.name, main_app.screen_path(schedule.screen) %></li>
+        <% end %>
+      <% end %>
+    </ul>
+  </p>
+<% end %>

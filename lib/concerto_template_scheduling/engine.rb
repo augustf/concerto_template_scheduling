@@ -17,8 +17,7 @@ module ConcertoTemplateScheduling
           Rails.logger.info "ConcertoTemplateScheduling: Initialization code is running"
         end
 
-        # The following hooks allow integration into the main Concerto app
-        # at the controller and view levels.
+        # show the schedule details alongside each screen
 
         add_controller_hook "ScreensController", :show, :before do
           @schedules = Schedule.where(:screen_id => @screen.id)
@@ -27,6 +26,15 @@ module ConcertoTemplateScheduling
         end
 
         add_view_hook "ScreensController", :screen_details, :partial => "concerto_template_scheduling/screens/screen_link"
+
+        # show that the template is in use
+  
+        add_controller_hook "TemplatesController", :show, :before do
+          @schedules = Schedule.where(:template_id => @template.id)
+        end
+
+        add_view_hook "TemplatesController", :template_details, :partial => "concerto_template_scheduling/templates/in_use_by"
+
       end
     end
   end
