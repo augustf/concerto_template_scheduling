@@ -15,6 +15,6 @@ rails generate concerto_template_scheduling
 ## Security
 If a user can update a screen, they have the ability to manage the scheduled templates for that screen.
 
-# TODO
-integrate ice_cube
-hook into concerto
+## TODO
+* integrate ice_cube
+* hook into concerto
