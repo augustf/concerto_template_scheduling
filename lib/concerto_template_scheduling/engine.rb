@@ -52,6 +52,17 @@ module ConcertoTemplateScheduling
           Schedule.destroy_all(:screen_id => @screen.id)
         end
 
+        # indicate if a template has dependencies
+
+        add_controller_hook "Template", :is_deletable, :after do
+          @deletable = Schedule.where(:template_id => self.id).empty? if @deletable
+        end        
+
+        add_controller_hook "Template", :screen_dependencies, :after do
+          @dependencies ||= []
+          @dependencies << Schedule.where(:template_id => self.id).collect { |t| t.screen }
+        end        
+
       end
     end
   end
