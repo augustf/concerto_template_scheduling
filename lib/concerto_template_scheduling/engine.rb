@@ -35,6 +35,7 @@ module ConcertoTemplateScheduling
 
         add_view_hook "TemplatesController", :template_details, :partial => "concerto_template_scheduling/templates/in_use_by"
 
+        # influence which template is the effective template for a screen
 
         add_controller_hook "Screen", :effective_template, :before do
           # self is the screen model instance
@@ -44,6 +45,13 @@ module ConcertoTemplateScheduling
             @template = schedules.first.template if !schedules.empty?
           end
         end
+
+        # delete schedules when a screen is deleted
+
+        add_controller_hook "ScreensController", :destroy, :after do
+          Schedule.destroy_all(:screen_id => @screen.id)
+        end
+
       end
     end
   end
