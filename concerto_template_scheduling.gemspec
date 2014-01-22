@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency "rails", "~> 3.2.16"
   s.add_dependency "ice_cube"
-  s.add_dependency "recurring_select"
+  s.add_dependency "recurring_select", '~> 1.2.1rc3'
 
   s.add_development_dependency "sqlite3"
 end

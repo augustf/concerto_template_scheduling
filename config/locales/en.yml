@@ -25,6 +25,7 @@ en:
     must_be_selected: 'must be selected'
     valid: 'Active'
     when: 'When'
+    schedule_must_be_defined: 'Scheduling Criteria must be defined when "Use Template When" is "As Scheduled"'
 
     schedules:
       edit:

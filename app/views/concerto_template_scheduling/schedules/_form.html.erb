@@ -68,8 +68,13 @@
       <div class="clearfix" id="scheduling_criteria">
         <%= config.label :scheduling_criteria, ConcertoTemplateScheduling::Schedule.human_attribute_name(:scheduling_criteria) %>
         <div class="input">
-          <% rules = []
-             rules << RecurringSelect.dirty_hash_to_rule(@schedule.config['scheduling_criteria']) if @schedule.config.has_key?('scheduling_criteria')
+          <% 
+            rules = []
+            if @schedule.config.has_key?('scheduling_criteria')
+              if !@schedule.config['scheduling_criteria'].empty?
+                rules << RecurringSelect.dirty_hash_to_rule(@schedule.config['scheduling_criteria'])
+              end
+            end
           %>
           <%= config.select_recurring :scheduling_criteria, rules %>
         </div>

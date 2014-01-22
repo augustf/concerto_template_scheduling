@@ -33,10 +33,19 @@ module ConcertoTemplateScheduling
     validates_presence_of :template, :message => I18n.t('concerto_template_scheduling.must_be_selected')
 
     validate :from_time_must_precede_to_time
+    validate :schedule_must_be_defined
 
     def from_time_must_precede_to_time
       if Time.zone.parse(self.config['from_time']) > Time.zone.parse(self.config['to_time'])
         errors.add(:base, I18n.t('concerto_template_scheduling.from_time_must_precede_to_time'))
+      end
+    end
+
+    def schedule_must_be_defined
+      if self.config['display_when'].to_i == DISPLAY_AS_SCHEDULED
+        if self.config['scheduling_criteria'].empty?
+          errors.add(:base, I18n.t('concerto_template_scheduling.schedule_must_be_defined'))
+        end
       end
     end
 
@@ -84,6 +93,7 @@ module ConcertoTemplateScheduling
     # Compress the config hash back into JSON to be stored in the database.
     # Called during `before_validation`.
     def save_config
+      self.config['scheduling_criteria'] = '' if self.config['scheduling_criteria'] == 'null'
       self.data = JSON.dump(self.config)
     end
 
@@ -111,9 +121,11 @@ module ConcertoTemplateScheduling
     end
 
     def schedule_in_words
-      s = IceCube::Schedule.new(self.start_time)
-      s.add_recurrence_rule(RecurringSelect.dirty_hash_to_rule(self.config['scheduling_criteria']))
-      s.to_s
+      if !self.config['scheduling_criteria'].empty?
+        s = IceCube::Schedule.new(self.start_time)
+        s.add_recurrence_rule(RecurringSelect.dirty_hash_to_rule(self.config['scheduling_criteria']))
+        s.to_s
+      end
     end
 
     def is_effective?
@@ -132,9 +144,13 @@ module ConcertoTemplateScheduling
               effective = true
             end
           elsif self.config['display_when'].to_i == DISPLAY_AS_SCHEDULED
-            s = IceCube::Schedule.new(self.start_time)
-            s.add_recurrence_rule(RecurringSelect.dirty_hash_to_rule(self.config['scheduling_criteria']))
-            effective = s.occurs_on? Clock.time
+            if !self.config['scheduling_criteria'].empty?
+              s = IceCube::Schedule.new(self.start_time)
+              s.add_recurrence_rule(RecurringSelect.dirty_hash_to_rule(self.config['scheduling_criteria']))
+              effective = s.occurs_on? Clock.time
+            else
+              # no schedule was set
+            end
           end
         end
       end
