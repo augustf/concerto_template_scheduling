@@ -39,6 +39,8 @@
                        feed_name = (feed.blank? ? 'Invalid Feed' : feed.name)
                     %>
                     <p><%= t(:feed) %>: <%= feed_name %></p>
+                  <% elsif @schedule.config['display_when'].to_i == ConcertoTemplateScheduling::Schedule::DISPLAY_AS_SCHEDULED %>
+                    <p><%=@schedule.schedule_in_words %></p>
                   <% end %>
                   <p><%= ConcertoTemplateScheduling::Schedule.human_attribute_name(:from_time)%>: <%= @schedule.config['from_time'] %></p>
                   <p><%= ConcertoTemplateScheduling::Schedule.human_attribute_name(:to_time)%>: <%= @schedule.config['to_time'] %></p>

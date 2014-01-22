@@ -28,8 +28,7 @@
                 <% if can? :update, schedule.screen %>
                   <%= link_to t('.edit_schedule'), template_scheduling.edit_schedule_path(schedule), :class => "btn btn-small pull-right" %>
                 <% end %>
-
-                <h3><%= schedule.template.name %></h3>
+                <p class="uppercase"><small><b><%= schedule.template.name %></b></small></p>
                 <div>
                   <%= image_tag main_app.preview_template_path(schedule.template, :height => 60, :format => :png), :style => "margin: 0px 1em 0px 0px;", :class => 'pull-left' %>
                   <p>
@@ -48,6 +47,8 @@
                         <%= schedule.feed.name %>
                       <% end %>
                     </p>
+                  <% elsif schedule.config['display_when'].to_i == ConcertoTemplateScheduling::Schedule::DISPLAY_AS_SCHEDULED %>
+                    <p><%= schedule.schedule_in_words %></p>
                   <% end %>
                 </div>
               </li>

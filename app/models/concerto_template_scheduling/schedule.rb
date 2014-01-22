@@ -110,6 +110,12 @@ module ConcertoTemplateScheduling
       end
     end
 
+    def schedule_in_words
+      s = IceCube::Schedule.new(self.start_time)
+      s.add_recurrence_rule(RecurringSelect.dirty_hash_to_rule(self.config['scheduling_criteria']))
+      s.to_s
+    end
+
     def is_effective?
       effective = false
 
@@ -125,8 +131,10 @@ module ConcertoTemplateScheduling
             if !self.feed.nil? && !self.feed.approved_contents.active.where('kind_id != 4').empty?
               effective = true
             end
-          else
-            # TODO: if it meets the scheduled day criteria 
+          elsif self.config['display_when'].to_i == DISPLAY_AS_SCHEDULED
+            s = IceCube::Schedule.new(self.start_time)
+            s.add_recurrence_rule(RecurringSelect.dirty_hash_to_rule(self.config['scheduling_criteria']))
+            effective = s.occurs_on? Clock.time
           end
         end
       end

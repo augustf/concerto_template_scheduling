@@ -46,6 +46,8 @@
                 <% else %>
                   <%= schedule.feed.name %><br/>
                 <% end %>
+              <% elsif schedule.config['display_when'].to_i == ConcertoTemplateScheduling::Schedule::DISPLAY_AS_SCHEDULED %>
+                <%= schedule.schedule_in_words %><br/>
               <% end %>
 
               <% if schedule.config['display_when'].to_i != ConcertoTemplateScheduling::Schedule::DISPLAY_NEVER %>

@@ -65,11 +65,13 @@
         </div>
       </div>
 
-      <!-- TODO: ice cube scheduling -->
       <div class="clearfix" id="scheduling_criteria">
         <%= config.label :scheduling_criteria, ConcertoTemplateScheduling::Schedule.human_attribute_name(:scheduling_criteria) %>
         <div class="input">
-          <%= config.text_area :scheduling_criteria %>
+          <% rules = []
+             rules << RecurringSelect.dirty_hash_to_rule(@schedule.config['scheduling_criteria']) if @schedule.config.has_key?('scheduling_criteria')
+          %>
+          <%= config.select_recurring :scheduling_criteria, rules %>
         </div>
       </div>
 
