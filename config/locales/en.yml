@@ -31,7 +31,7 @@ en:
       edit:
         header: 'Edit Template Schedule for %{screen}'
       form:
-        display_when_tip: 'You can specify that the template will never be used (effectively turning it "off"), will be used every day, will be used on the dates specified by the scheduling criteria (yet to be implemented), or will be used when content has been detected on a specific feed.'
+        display_when_tip: 'You can specify that the template will never be used (effectively turning it "off"), will be used every day, will be used on the dates specified by the scheduling criteria, or will be used when content has been detected on a specific feed.'
         provide_details: 'Provide Details'
         set_specific_times: 'Set specific times'
         times_tip: "This is the window during each qualified day that the template will be shown."
