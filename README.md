@@ -20,6 +20,5 @@ rails generate concerto_template_scheduling
 ## Security
 If a user can update a screen, they have the ability to manage the scheduled templates for that screen.
 
-## TODO
-* integrate ice_cube
-* hook into concerto
+## Requirements
+`start_time` and `end_time` setters (in the model) don't work well with ruby 1.8.7.
