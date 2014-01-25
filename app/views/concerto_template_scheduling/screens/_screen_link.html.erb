@@ -36,8 +36,7 @@
                       <%= l(schedule.start_time.to_date, :format => :short) %> - <%= l(schedule.end_time.to_date, :format => :short) %>
                     <% end %> <b><%= schedule.is_effective? ? t(:active) : '' %></b>
                   </p>
-                  <p><%= schedule.config['from_time'] %> - <%= schedule.config['to_time'] %></p>
-                  <p><%= t('concerto_template_scheduling.when')%>: <b><%= ConcertoTemplateScheduling::Schedule::DISPLAY_WHEN.key(schedule.config['display_when'].to_i) %></b></p>
+                  <p><b><%= ConcertoTemplateScheduling::Schedule::DISPLAY_WHEN.key(schedule.config['display_when'].to_i) %></b></p>
 
                   <% if schedule.config['display_when'].to_i == ConcertoTemplateScheduling::Schedule::DISPLAY_CONTENT_EXISTS %>
                     <p>
@@ -49,6 +48,9 @@
                     </p>
                   <% elsif schedule.config['display_when'].to_i == ConcertoTemplateScheduling::Schedule::DISPLAY_AS_SCHEDULED %>
                     <p><%= schedule.schedule_in_words %></p>
+                  <% end %>
+                  <% if schedule.config['display_when'].to_i != ConcertoTemplateScheduling::Schedule::DISPLAY_NEVER %>
+                    <p><%= schedule.config['from_time'] %> - <%= schedule.config['to_time'] %></p>
                   <% end %>
                 </div>
               </li>

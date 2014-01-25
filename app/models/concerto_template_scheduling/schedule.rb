@@ -3,13 +3,11 @@ module ConcertoTemplateScheduling
     include ActiveModel::ForbiddenAttributesProtection
 
     DISPLAY_NEVER=0
-    DISPLAY_ALWAYS=1
     DISPLAY_AS_SCHEDULED=2
     DISPLAY_CONTENT_EXISTS=3
 
     DISPLAY_WHEN = {
       I18n.t('concerto_template_scheduling.never') => DISPLAY_NEVER, 
-      I18n.t('concerto_template_scheduling.always') => DISPLAY_ALWAYS, 
       I18n.t('concerto_template_scheduling.as_scheduled') => DISPLAY_AS_SCHEDULED,
       I18n.t('concerto_template_scheduling.content_exists') => DISPLAY_CONTENT_EXISTS
     }
@@ -65,7 +63,7 @@ module ConcertoTemplateScheduling
     # @return [Hash{String => String, Number}] configuration hash.
     def default_config
       {
-        'display_when' => DISPLAY_ALWAYS,
+        'display_when' => DISPLAY_AS_SCHEDULED,
         'from_time' => '12:00am',
         'to_time' => '11:59pm'
       }
@@ -139,9 +137,7 @@ module ConcertoTemplateScheduling
         # and it is within the viewing window for the day
         if Clock.time >= Time.parse(self.config['from_time']) && Clock.time <= Time.parse(self.config['to_time'])
           # and it is either marked as always shown
-          if self.config['display_when'].to_i == DISPLAY_ALWAYS
-            effective = true
-          elsif self.config['display_when'].to_i == DISPLAY_CONTENT_EXISTS
+          if self.config['display_when'].to_i == DISPLAY_CONTENT_EXISTS
             # or if we detect actual content on the specified feed
             if !self.feed.nil? && !self.feed.approved_contents.active.where('kind_id != 4').empty?
               effective = true
