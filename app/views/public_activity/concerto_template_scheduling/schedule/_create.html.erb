@@ -1,0 +1,9 @@
+<% public_owner = User.find(activity.owner) %>
+<%= link_to public_owner.name, public_owner %> <%=t('.created_a_schedule')%>  
+<% if activity.trackable %>
+  <%= link_to l(activity.trackable.start_time.to_date, :format => :short), template_scheduling.schedule_path(activity.trackable) %>
+  <%= t(:for) %> 
+  <%= link_to activity.parameters[:screen_name], main_app.screen_path(activity.parameters[:screen_id]) %> 
+<% else %>
+  <%= t('public_activity.which_has_since_been_removed') %>
+<% end %>

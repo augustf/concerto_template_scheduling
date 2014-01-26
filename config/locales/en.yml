@@ -60,3 +60,9 @@ en:
     templates:
       in_use_by:
         scheduled_for_the_following_screens: 'Scheduled for the following screens'
+
+  public_activity:
+    concerto_template_scheduling:
+      schedule:
+        create:
+          created_a_schedule: 'created a schedule starting '

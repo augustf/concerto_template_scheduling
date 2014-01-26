@@ -60,6 +60,8 @@ module ConcertoTemplateScheduling
       auth! :action => :update, :object => @schedule.screen
       respond_to do |format|
         if @schedule.save
+          process_notification(@schedule, {:screen_id => @schedule.screen_id, :screen_name => @schedule.screen.name }, :key => 'concerto_template_scheduling.schedule.create', :owner => current_user, :action => 'create')
+
           format.html { redirect_to @schedule, notice: 'Schedule was successfully created.' }
           format.json { render json: @schedule, status: :created, location: @schedule }
         else
