@@ -20,6 +20,7 @@ en:
     as_scheduled: 'As Scheduled'
     content_exists: 'Content Exists on Feed'
     effective: 'Currently in Effect? '
+    for: 'for'
     never: 'Never'
     from_time_must_precede_to_time: "'From Time' must precede 'To Time'"
     must_be_selected: 'must be selected'
