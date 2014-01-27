@@ -1,6 +1,7 @@
 module ConcertoTemplateScheduling
   class Schedule < ActiveRecord::Base
     include ActiveModel::ForbiddenAttributesProtection
+    include PublicActivity::Common if defined? PublicActivity::Common
 
     DISPLAY_NEVER=0
     DISPLAY_AS_SCHEDULED=2

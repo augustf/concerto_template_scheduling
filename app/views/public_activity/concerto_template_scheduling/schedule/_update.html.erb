@@ -1,0 +1,17 @@
+<% public_owner = User.find(activity.owner) %>
+<%= link_to public_owner.name, public_owner %> <%=t('.updated_template')%>  
+<% if ::Template.exists?(activity.parameters[:template_id]) %>
+  <%= link_to activity.parameters[:template_name], main_app.template_path(activity.parameters[:template_id]) %> 
+<% else %>
+  <%= activity.parameters[:template_name] %> 
+<% end %>
+<% if activity.trackable && defined?(template_scheduling) %>
+  <%= t('concerto_template_scheduling.starting') %> 
+  <%= link_to l(activity.trackable.start_time.to_date, :format => :short), template_scheduling.schedule_path(activity.trackable) %>
+<% end %>
+  <%= t('concerto_template_scheduling.for') %> 
+<% if Screen.exists?(activity.parameters[:screen_id]) %>
+  <%= link_to activity.parameters[:screen_name], main_app.screen_path(activity.parameters[:screen_id]) %> 
+<% else %>
+  <%= activity.parameters[:screen_name] %> 
+<% end %>

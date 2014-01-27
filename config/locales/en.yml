@@ -20,12 +20,14 @@ en:
     as_scheduled: 'As Scheduled'
     content_exists: 'Content Exists on Feed'
     effective: 'Currently in Effect? '
+    for: 'for'
     never: 'Never'
     from_time_must_precede_to_time: "'From Time' must precede 'To Time'"
     must_be_selected: 'must be selected'
     valid: 'Active'
     when: 'When'
     schedule_must_be_defined: 'Scheduling Criteria must be defined when "Use Template When" is "As Scheduled"'
+    starting: 'starting'
 
     schedules:
       edit:
@@ -60,3 +62,13 @@ en:
     templates:
       in_use_by:
         scheduled_for_the_following_screens: 'Scheduled for the following screens'
+
+  public_activity:
+    concerto_template_scheduling:
+      schedule:
+        create:
+          scheduled_template: 'scheduled template '
+        destroy:
+          deleted_a_schedule: 'deleted a scheduled template '
+        update:
+          updated_template: 'updated schedule for template '
