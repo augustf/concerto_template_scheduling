@@ -27,6 +27,7 @@ en:
     valid: 'Active'
     when: 'When'
     schedule_must_be_defined: 'Scheduling Criteria must be defined when "Use Template When" is "As Scheduled"'
+    starting: 'starting'
 
     schedules:
       edit:
@@ -66,4 +67,8 @@ en:
     concerto_template_scheduling:
       schedule:
         create:
-          created_a_schedule: 'created a schedule starting '
+          scheduled_template: 'scheduled template '
+        destroy:
+          deleted_a_schedule: 'deleted a scheduled template '
+        update:
+          updated_template: 'updated schedule for template '
