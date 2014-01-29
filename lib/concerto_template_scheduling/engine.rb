@@ -37,13 +37,11 @@ module ConcertoTemplateScheduling
 
         # influence which template is the effective template for a screen
 
-        add_controller_hook "Screen", :effective_template, :before do
-          # self is the screen model instance
-          if @template.nil?
-            schedules = Schedule.active.where(:screen_id => self.id)
-            schedules.reject! {|s| !s.is_effective? }
-            @template = schedules.first.template if !schedules.empty?
-          end
+        add_controller_hook "Screen", :frontend_display, :before do
+          # sets the template to the "effective" template
+          schedules = Schedule.active.where(:screen_id => self.id)
+          schedules.reject! {|s| !s.is_effective? }
+          self.template = schedules.first.template if !schedules.empty?
         end
 
         # delete schedules when a screen is deleted
