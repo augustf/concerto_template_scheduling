@@ -37,15 +37,16 @@ module ConcertoTemplateScheduling
         add_view_hook "TemplatesController", :template_details, :partial => "concerto_template_scheduling/templates/in_use_by"
 
         # influence which template is the effective template for a screen
+        # prepend these so that the EMS plugin can override them
 
-        add_controller_hook "Screen", :frontend_display, :before do
+        add_controller_hook "Screen", :frontend_display, [:before, :prepend => true] do
           # sets the template to the "effective" template
           schedules = Schedule.active.where(:screen_id => self.id)
           schedules.reject! {|s| !s.is_effective? }
           self.template = schedules.first.template if !schedules.empty?
         end
 
-        add_controller_hook "Frontend::ContentsController", :index, :after do
+        add_controller_hook "Frontend::ContentsController", :index, [:after, :prepend => true]  do
           # sets the template to the "effective" template
           schedules = Schedule.active.where(:screen_id => @screen.id)
           schedules.reject! {|s| !s.is_effective? }
