@@ -45,6 +45,13 @@ module ConcertoTemplateScheduling
           self.template = schedules.first.template if !schedules.empty?
         end
 
+        add_controller_hook "Frontend::ContentsController", :index, :after do
+          # sets the template to the "effective" template
+          schedules = Schedule.active.where(:screen_id => @screen.id)
+          schedules.reject! {|s| !s.is_effective? }
+          @screen.template = schedules.first.template if !schedules.empty?
+        end
+
         # delete schedules when a screen is deleted
 
         add_controller_hook "ScreensController", :destroy, :after do
