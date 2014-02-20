@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.version     = ConcertoTemplateScheduling::VERSION
   s.authors     = ["Marvin Frederickson"]
   s.email       = ["marvin.frederickson@gmail.com"]
-  s.homepage    = ""
+  s.homepage    = "https://github.com/concerto/concerto_template_scheduling"
   s.summary     = "Scheduling of Templates for Screens"
   s.description = "Schedule templates for screens in Concerto."
 
