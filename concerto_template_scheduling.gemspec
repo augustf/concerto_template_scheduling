@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
   s.files = Dir["{app,config,db,lib}/**/*", "LICENSE", "Rakefile", "README.md"]
   s.test_files = Dir["test/**/*"]
 
-  s.add_dependency "rails", "~> 3.2.16"
+  s.add_dependency "rails", "~> 4.1.7"
   s.add_dependency "ice_cube"
   s.add_dependency "recurring_select", '~> 1.2.1rc3'
 
