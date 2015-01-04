@@ -23,7 +23,7 @@ module ConcertoTemplateScheduling
         add_controller_hook "ScreensController", :show, :before do
           @schedules = Schedule.where(:screen_id => @screen.id)
           # reject the schedules that specify templates that have been deleted
-          @schedules.reject!{|s| s.template.nil?}
+          @schedules.to_a.reject!{|s| s.template.nil?}
         end
 
         add_view_hook "ScreensController", :screen_details, :partial => "concerto_template_scheduling/screens/screen_link"
@@ -42,14 +42,14 @@ module ConcertoTemplateScheduling
         add_controller_hook "Screen", :frontend_display, [:before, :prepend => true] do
           # sets the template to the "effective" template
           schedules = Schedule.active.where(:screen_id => self.id)
-          schedules.reject! {|s| !s.is_effective? }
+          schedules.to_a.reject! {|s| !s.is_effective? }
           self.template = schedules.first.template if !schedules.empty?
         end
 
         add_controller_hook "Frontend::ContentsController", :index, [:after, :prepend => true]  do
           # sets the template to the "effective" template
           schedules = Schedule.active.where(:screen_id => @screen.id)
-          schedules.reject! {|s| !s.is_effective? }
+          schedules.to_a.reject! {|s| !s.is_effective? }
           @screen.template = schedules.first.template if !schedules.empty?
         end
 

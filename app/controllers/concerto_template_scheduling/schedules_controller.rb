@@ -11,7 +11,7 @@ module ConcertoTemplateScheduling
       @schedules = Schedule.all
       # ignore the schedules that belong to screens we cant read
       # or schedules where the template has been deleted
-      @schedules.reject! { |s| !can?(:read, s.screen) || s.template.nil? }
+      @schedules.to_a.reject! { |s| !can?(:read, s.screen) || s.template.nil? }
   
       respond_to do |format|
         format.html # index.html.erb

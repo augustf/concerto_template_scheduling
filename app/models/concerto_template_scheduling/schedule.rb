@@ -169,7 +169,7 @@ module ConcertoTemplateScheduling
       if !self.screen.nil?
         feeds = Feed.all
         ability = Ability.new(self.screen)
-        feeds.reject { |feed| !ability.can?(:read, feed) }
+        feeds.to_a.reject { |feed| !ability.can?(:read, feed) }
       end
     end
 
