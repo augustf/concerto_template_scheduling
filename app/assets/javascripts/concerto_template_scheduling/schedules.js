@@ -21,5 +21,4 @@ function attachConcertoTemplateSchedulingHandlers() {
   toggleCtsFormFields();
 }
 
-$(document).ready(attachConcertoTemplateSchedulingHandlers);
-$(document).on('page:change', attachConcertoTemplateSchedulingHandlers);
+$(document).on('turbolinks:load', attachConcertoTemplateSchedulingHandlers);
