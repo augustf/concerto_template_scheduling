@@ -1,10 +1,10 @@
 // Place all the behaviors and hooks related to the matching controller here.
 // All this logic will automatically be available in application.js.
 
-function attachConcertoTemplateSchedulingHandlers() {
-  $('select#schedule_config_display_when').on('change', toggleCtsFormFields);
+var ConcertoTemplateScheduling = {
+  _initialized: false,
 
-  function toggleCtsFormFields() {
+  toggleCtsFormFields: function () {
     var dw = $('select#schedule_config_display_when').val();
     if (dw == 3) {  // 'content exists'
       $('#feed_selection').show();
@@ -16,10 +16,16 @@ function attachConcertoTemplateSchedulingHandlers() {
       $('#feed_selection').hide();
       $('#scheduling_criteria').hide();
     }
+  },
+
+  initHandlers: function () {
+    if (!ConcertoTemplateScheduling._initialized) {
+      $(document).on('change', 'select#schedule_config_display_when', ConcertoTemplateScheduling.toggleCtsFormFields);
+    }
+    ConcertoTemplateScheduling.toggleCtsFormFields();
+    ConcertoTemplateScheduling._initialized = true;
   }
+};
 
-  toggleCtsFormFields();
-}
-
-$(document).ready(attachConcertoTemplateSchedulingHandlers);
-$(document).on('page:change', attachConcertoTemplateSchedulingHandlers);
+$(document).ready(ConcertoTemplateScheduling.initHandlers);
+$(document).on('turbolinks:load', ConcertoTemplateScheduling.initHandlers);
