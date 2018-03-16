@@ -55,7 +55,7 @@
       <div class="clearfix">
         <%= label_tooltip "schedule", 'config_display_when', ConcertoTemplateScheduling::Schedule.human_attribute_name(:display_when), :tip => t('.display_when_tip') %>
         <div class="input">
-          <%= config.select :display_when, options_for_select(ConcertoTemplateScheduling::Schedule::DISPLAY_WHEN, @schedule.config['display_when']) %>
+          <%= config.select :display_when, options_for_select(ConcertoTemplateScheduling::Schedule.display_when_options, @schedule.config['display_when']) %>
         </div>
       </div>
 
@@ -89,7 +89,7 @@
                 <%= label_tooltip "schedule", :from_time, ConcertoTemplateScheduling::Schedule.human_attribute_name(:from_time), :tip => t('.times_tip') %>
                 <div class="input-prepend">
                   <span class="add-on"><%= t(:at) %></span>
-                  <%= config.text_field(:from_time, :maxlength => 20, :class => "timefield input-small", :value => @schedule.config['from_time']) %>
+                  <%= config.text_field(:from_time, :maxlength => 20, :class => "timefield input-small", :value => l(DateTime.strptime(@schedule.config['from_time'], '%I:%M %P'), format: :twelve_hour_time)) %>
                 </div>
               </div>
             </div>
@@ -98,7 +98,7 @@
                 <%= f.label :to_time %>
                 <div class="input-prepend">
                   <span class="add-on"><%= t(:at) %></span>
-                  <%= config.text_field(:to_time, :maxlength => 20, :class => "timefield input-small", :value => @schedule.config['to_time']) %>
+                  <%= config.text_field(:to_time, :maxlength => 20, :class => "timefield input-small", :value => l(DateTime.strptime(@schedule.config['to_time'], '%I:%M %P'), format: :twelve_hour_time)) %>
                 </div>
               </div>
             </div>

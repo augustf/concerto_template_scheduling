@@ -33,7 +33,7 @@
 
                   <p><%= ConcertoTemplateScheduling::Schedule.human_attribute_name(:start_time)%>: <%= l(@schedule.start_time, :format => :short_day) %> <%= l(@schedule.start_time, :format => :twelve_hour_time) %></p>
                   <p><%= ConcertoTemplateScheduling::Schedule.human_attribute_name(:end_time)%>: <%= l(@schedule.end_time, :format => :short_day) %> <%= l(@schedule.end_time, :format => :twelve_hour_time) %></p>
-                  <p><%= t('concerto_template_scheduling.when')%>: <b><%= ConcertoTemplateScheduling::Schedule::DISPLAY_WHEN.key(@schedule.config['display_when'].to_i) %></b></p>
+                  <p><%= t('concerto_template_scheduling.when')%>: <b><%= ConcertoTemplateScheduling::Schedule.display_when_options.key(@schedule.config['display_when'].to_i) %></b></p>
                   <% if @schedule.config['display_when'].to_i == ConcertoTemplateScheduling::Schedule::DISPLAY_CONTENT_EXISTS %>
                     <% feed = Feed.find(@schedule.config['feed_id'].to_i)
                        feed_name = (feed.blank? ? 'Invalid Feed' : feed.name)
@@ -42,8 +42,8 @@
                   <% elsif @schedule.config['display_when'].to_i == ConcertoTemplateScheduling::Schedule::DISPLAY_AS_SCHEDULED %>
                     <p><%=@schedule.schedule_in_words %></p>
                   <% end %>
-                  <p><%= ConcertoTemplateScheduling::Schedule.human_attribute_name(:from_time)%>: <%= @schedule.config['from_time'] %></p>
-                  <p><%= ConcertoTemplateScheduling::Schedule.human_attribute_name(:to_time)%>: <%= @schedule.config['to_time'] %></p>
+                  <p><%= ConcertoTemplateScheduling::Schedule.human_attribute_name(:from_time)%>: <%= l(DateTime.strptime(@schedule.config['from_time'], "%I:%M %P"), format: :twelve_hour_time) %></p>
+                  <p><%= ConcertoTemplateScheduling::Schedule.human_attribute_name(:to_time)%>: <%= l(DateTime.strptime(@schedule.config['to_time'], "%I:%M %P"), format: :twelve_hour_time) %></p>
 
             </div>
           </div>
