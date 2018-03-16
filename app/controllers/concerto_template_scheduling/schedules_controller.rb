@@ -34,10 +34,10 @@ module ConcertoTemplateScheduling
     # GET /schedules/new
     # GET /schedules/new.json
     def new
-      @schedule = Schedule.new
       if !params[:screen_id].nil?
         # TODO: Error handling
-        @schedule.screen = Screen.find(params[:screen_id])
+        s = Screen.find(params[:screen_id])
+        @schedule = Schedule.new(screen: s)
       end
       auth! :action => :update, :object => @schedule.screen
 
