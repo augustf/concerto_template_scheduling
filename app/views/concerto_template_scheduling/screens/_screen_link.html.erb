@@ -33,7 +33,7 @@
                   <%= image_tag main_app.preview_template_path(schedule.template, :height => 60, :format => :png), :style => "margin: 0px 1em 0px 0px;", :class => 'pull-left' %>
                   <p>
                     <%= link_to(template_scheduling.schedule_path(schedule)) do %>
-                      <%= l(schedule.start_time.to_date, :format => :short) %> - <%= l(schedule.end_time.to_date, :format => :short) %>
+                      <%= l(schedule.start_time, format: :short_day) %> - <%= l(schedule.end_time, format: :short_day) %>
                     <% end %> <b><%= schedule.is_effective? ? t(:active) : '' %></b>
                   </p>
                   <p><b><%= ConcertoTemplateScheduling::Schedule::DISPLAY_WHEN.key(schedule.config['display_when'].to_i) %></b></p>

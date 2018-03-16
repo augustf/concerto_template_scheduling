@@ -65,16 +65,16 @@ module ConcertoTemplateScheduling
     def default_config
       {
         'display_when' => DISPLAY_AS_SCHEDULED,
-        'from_time' => '12:00am',
-        'to_time' => '11:59pm'
+        'from_time' => '12:00 am',
+        'to_time' => '11:59 pm'
       }
     end
 
     # Create a new configuration hash if one does not already exist.
     # Called during `after_initialize`, where a config may or may not exist.
     def create_config
-      self.start_time ||= Time.zone.parse("12:00am", Clock.time + ConcertoConfig[:start_date_offset].to_i.days)
-      self.end_time ||= Time.zone.parse("11:59pm", Clock.time + ConcertoConfig[:start_date_offset].to_i.days + ConcertoConfig[:default_content_run_time].to_i.days)
+      self.start_time ||= Time.zone.parse("12:00 am", Clock.time + ConcertoConfig[:start_date_offset].to_i.days)
+      self.end_time ||= Time.zone.parse("11:59 pm", Clock.time + ConcertoConfig[:start_date_offset].to_i.days + ConcertoConfig[:default_content_run_time].to_i.days)
 
       self.config = {} if !self.config
       self.config = default_config().merge(self.config)
@@ -96,16 +96,14 @@ module ConcertoTemplateScheduling
       self.data = JSON.dump(self.config)
     end
 
-# TODO: make sure these formats are locale-ized!
-
     # Setter for the start time.  If a hash is passed, convert that into a DateTime object and then a string.
     # Otherwise, just set it like normal.  This is a bit confusing due to the differences in how Ruby handles
     # times between 1.9.x and 1.8.x.
     def start_time=(_start_time)
       if _start_time.kind_of?(Hash)
         # convert to time, strip off the timezone offset so it reflects local time
-        t = DateTime.strptime("#{_start_time[:date]} #{_start_time[:time]}", "%m/%d/%Y %l:%M %p")
-        write_attribute(:start_time, Time.zone.parse(Time.iso8601(t.to_s).to_s(:db)).to_s(:db))
+        t = DateTime.strptime("#{_start_time[:date]} #{_start_time[:time]}".gsub(I18n.t('time.am'), "am").gsub(I18n.t('time.pm'), "pm"), "#{I18n.t('time.formats.date_long_year')} %I:%M %P")
+        write_attribute(:start_time, Time.zone.parse(Time.iso8601(t.to_s).to_s(:db)))
       else
         write_attribute(:start_time, _start_time)
       end
@@ -115,8 +113,8 @@ module ConcertoTemplateScheduling
     def end_time=(_end_time)
       if _end_time.kind_of?(Hash)
         # convert to time, strip off the timezone offset so it reflects local time
-        t = DateTime.strptime("#{_end_time[:date]} #{_end_time[:time]}", "%m/%d/%Y %l:%M %p")
-        write_attribute(:end_time, Time.zone.parse(Time.iso8601(t.to_s).to_s(:db)).to_s(:db))
+        t = DateTime.strptime("#{_end_time[:date]} #{_end_time[:time]}".gsub(I18n.t('time.am'), "am").gsub(I18n.t('time.pm'), "pm"), "#{I18n.t('time.formats.date_long_year')} %I:%M %P")
+        write_attribute(:end_time, Time.zone.parse(Time.iso8601(t.to_s).to_s(:db)))
       else
         write_attribute(:end_time, _end_time)
       end
@@ -134,6 +132,7 @@ module ConcertoTemplateScheduling
       effective = false
 
       # if it is during the valid/active time frame and the template still exists
+Rails.logger.debug("\n\nIS_EFFECTIVE?\n\nClock.time = #{Clock.time}\nself.start_time = #{self.start_time}\n")
       if Clock.time >= self.start_time && Clock.time <= self.end_time && !self.template.nil?
         # and it is within the viewing window for the day
         if Clock.time >= Time.parse(self.config['from_time']) && Clock.time <= Time.parse(self.config['to_time'])

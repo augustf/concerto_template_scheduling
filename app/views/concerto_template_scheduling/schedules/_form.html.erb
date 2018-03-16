@@ -17,14 +17,14 @@
               <%= label_tooltip "schedule", :start_time, t('.valid_from'), :tip => t('.valid_tip') %>
               <div class="input">
                 <div class="input-prepend cursor-pointer" style="margin-bottom: 6px;">
-                  <span class="add-on"><i class="icon-calendar"></i></span>
-                  <%= f.text_field("start_time[date]", :id => "start_time_date", :maxlength => 20, :class => "datefield input-small", :value => @schedule.start_time.strftime("%m/%d/%Y")) %>
+                  <span class="add-on"><i class="fa fa-calendar"></i></span>
+                  <%= f.text_field "start_time[date]", :id => "start_time_date", :maxlength => 20, :class => "datefield input-small", :value => l(@schedule.start_time, format: :date_long_year) %>
                 </div>
                 <p>&nbsp;<a class="event-toggleTimeSelects" href="#"><%= t('.set_specific_times') %></a></p>
                 <div class="event-timeSelectDiv">
                   <div class="input-prepend">
                     <span class="add-on"><%= t(:at) %></span>
-                    <%= f.text_field("start_time[time]", :id => "start_time_time", :maxlength => 20, :class => "timefield input-small", :value => @schedule.start_time.strftime("%l:%M%P")) %>
+                    <%= f.text_field "start_time[time]", :id => "start_time_time", :maxlength => 20, :class => "timefield input-small", :value => l(@schedule.start_time, format: :twelve_hour_time) %>
                   </div>
                 </div>
               </div>
@@ -35,13 +35,13 @@
               <%= f.label :end_time, t('.valid_until') %>
               <div class="input">
                 <div class="input-prepend cursor-pointer" style="margin-bottom: 6px;">
-                  <span class="add-on"><i class="icon-calendar"></i></span>
-                  <%= f.text_field("end_time[date]", :id => "end_time_date", :maxlength => 20, :class => "datefield input-small", :value => @schedule.end_time.strftime("%m/%d/%Y")) %>
+                  <span class="add-on"><i class="fa fa-calendar"></i></span>
+                  <%= f.text_field "end_time[date]", :id => "end_time_date", :maxlength => 20, :class => "datefield input-small", :value => l(@schedule.end_time, format: :date_long_year) %>
                 </div>
                 <div class="event-timeSelectDiv">
                   <div class="input-prepend">
                     <span class="add-on"><%= t(:at) %></span>
-                    <%= f.text_field("end_time[time]", :id => "end_time_time", :maxlength => 20, :class => "timefield input-small", :value => @schedule.end_time.strftime("%l:%M%P")) %>
+                    <%= f.text_field "end_time[time]", :id => "end_time_time", :maxlength => 20, :class => "timefield input-small", :value => l(@schedule.end_time, format: :twelve_hour_time) %>
                   </div>
                 </div>
               </div>
