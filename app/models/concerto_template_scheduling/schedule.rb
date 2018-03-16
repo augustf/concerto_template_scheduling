@@ -75,9 +75,11 @@ module ConcertoTemplateScheduling
     # Create a new configuration hash if one does not already exist.
     # Called during `after_initialize`, where a config may or may not exist.
     def create_config
-      self.start_time ||= Time.zone.parse(ConcertoConfig[:content_default_start_time], Clock.time + ConcertoConfig[:start_date_offset].to_i.days)
-      self.end_time ||= Time.zone.parse(ConcertoConfig[:content_default_end_time], Clock.time + ConcertoConfig[:start_date_offset].to_i.days + ConcertoConfig[:default_content_run_time].to_i.days)
-
+      Time.use_zone(screen.time_zone) do
+        self.start_time ||= Time.zone.parse(ConcertoConfig[:content_default_start_time], Clock.time + ConcertoConfig[:start_date_offset].to_i.days)
+        self.end_time ||= Time.zone.parse(ConcertoConfig[:content_default_end_time], Clock.time + ConcertoConfig[:start_date_offset].to_i.days + ConcertoConfig[:default_content_run_time].to_i.days)
+      end
+      
       self.config = {} if !self.config
       self.config = default_config().merge(self.config)
       self.config
