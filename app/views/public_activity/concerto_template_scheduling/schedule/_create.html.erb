@@ -7,7 +7,7 @@
 <% end %>
 <% if activity.trackable && defined?(template_scheduling) %>
   <%= t('concerto_template_scheduling.starting') %> 
-  <%= link_to l(activity.trackable.start_time.to_date, :format => :short), template_scheduling.schedule_path(activity.trackable) %>
+  <%= link_to l(activity.trackable.start_time, :format => :short_day), template_scheduling.schedule_path(activity.trackable) %>
 <% end %>
   <%= t('concerto_template_scheduling.for') %> 
 <% if Screen.exists?(activity.parameters[:screen_id]) %>

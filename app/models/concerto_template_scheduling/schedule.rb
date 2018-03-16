@@ -7,11 +7,13 @@ module ConcertoTemplateScheduling
     DISPLAY_AS_SCHEDULED=2
     DISPLAY_CONTENT_EXISTS=3
 
-    DISPLAY_WHEN = {
-      I18n.t('concerto_template_scheduling.never') => DISPLAY_NEVER, 
-      I18n.t('concerto_template_scheduling.as_scheduled') => DISPLAY_AS_SCHEDULED,
-      I18n.t('concerto_template_scheduling.content_exists') => DISPLAY_CONTENT_EXISTS
-    }
+    def self.display_when_options
+      {
+        I18n.t('concerto_template_scheduling.never') => DISPLAY_NEVER, 
+        I18n.t('concerto_template_scheduling.as_scheduled') => DISPLAY_AS_SCHEDULED,
+        I18n.t('concerto_template_scheduling.content_exists') => DISPLAY_CONTENT_EXISTS
+      }
+    end
 
     belongs_to :screen
     belongs_to :template
@@ -65,16 +67,16 @@ module ConcertoTemplateScheduling
     def default_config
       {
         'display_when' => DISPLAY_AS_SCHEDULED,
-        'from_time' => '12:00am',
-        'to_time' => '11:59pm'
+        'from_time' => ConcertoConfig[:content_default_start_time],
+        'to_time' => ConcertoConfig[:content_default_end_time]
       }
     end
 
     # Create a new configuration hash if one does not already exist.
     # Called during `after_initialize`, where a config may or may not exist.
     def create_config
-      self.start_time ||= Time.zone.parse("12:00am", Clock.time + ConcertoConfig[:start_date_offset].to_i.days)
-      self.end_time ||= Time.zone.parse("11:59pm", Clock.time + ConcertoConfig[:start_date_offset].to_i.days + ConcertoConfig[:default_content_run_time].to_i.days)
+      self.start_time ||= Time.zone.parse(ConcertoConfig[:content_default_start_time], Clock.time + ConcertoConfig[:start_date_offset].to_i.days)
+      self.end_time ||= Time.zone.parse(ConcertoConfig[:content_default_end_time], Clock.time + ConcertoConfig[:start_date_offset].to_i.days + ConcertoConfig[:default_content_run_time].to_i.days)
 
       self.config = {} if !self.config
       self.config = default_config().merge(self.config)
@@ -93,32 +95,36 @@ module ConcertoTemplateScheduling
     # Called during `before_validation`.
     def save_config
       self.config['scheduling_criteria'] = '' if self.config['scheduling_criteria'] == 'null'
+      self.config['from_time'] = self.config['from_time'].gsub(I18n.t('time.am'), "am").gsub(I18n.t('time.pm'), "pm")
+      self.config['to_time'] = self.config['to_time'].gsub(I18n.t('time.am'), "am").gsub(I18n.t('time.pm'), "pm")
       self.data = JSON.dump(self.config)
     end
-
-# TODO: make sure these formats are locale-ized!
 
     # Setter for the start time.  If a hash is passed, convert that into a DateTime object and then a string.
     # Otherwise, just set it like normal.  This is a bit confusing due to the differences in how Ruby handles
     # times between 1.9.x and 1.8.x.
     def start_time=(_start_time)
-      if _start_time.kind_of?(Hash)
-        # convert to time, strip off the timezone offset so it reflects local time
-        t = DateTime.strptime("#{_start_time[:date]} #{_start_time[:time]}", "%m/%d/%Y %l:%M %p")
-        write_attribute(:start_time, Time.zone.parse(Time.iso8601(t.to_s).to_s(:db)).to_s(:db))
-      else
-        write_attribute(:start_time, _start_time)
+      Time.use_zone(screen.time_zone) do
+        if _start_time.kind_of?(Hash)
+          # convert to time, strip off the timezone offset so it reflects local time
+          t = DateTime.strptime("#{_start_time[:date]} #{_start_time[:time]}".gsub(I18n.t('time.am'), "am").gsub(I18n.t('time.pm'), "pm"), "#{I18n.t('time.formats.date_long_year')} %I:%M %P")
+          write_attribute(:start_time, Time.zone.parse(Time.iso8601(t.to_s).to_s(:db)))
+        else
+          write_attribute(:start_time, _start_time)
+        end
       end
     end
 
     # See start_time=.
     def end_time=(_end_time)
-      if _end_time.kind_of?(Hash)
-        # convert to time, strip off the timezone offset so it reflects local time
-        t = DateTime.strptime("#{_end_time[:date]} #{_end_time[:time]}", "%m/%d/%Y %l:%M %p")
-        write_attribute(:end_time, Time.zone.parse(Time.iso8601(t.to_s).to_s(:db)).to_s(:db))
-      else
-        write_attribute(:end_time, _end_time)
+      Time.use_zone(screen.time_zone) do
+        if _end_time.kind_of?(Hash)
+          # convert to time, strip off the timezone offset so it reflects local time
+          t = DateTime.strptime("#{_end_time[:date]} #{_end_time[:time]}".gsub(I18n.t('time.am'), "am").gsub(I18n.t('time.pm'), "pm"), "#{I18n.t('time.formats.date_long_year')} %I:%M %P")
+          write_attribute(:end_time, Time.zone.parse(Time.iso8601(t.to_s).to_s(:db)))
+        else
+          write_attribute(:end_time, _end_time)
+        end
       end
     end
 
@@ -134,22 +140,28 @@ module ConcertoTemplateScheduling
       effective = false
 
       # if it is during the valid/active time frame and the template still exists
-      if Clock.time >= self.start_time && Clock.time <= self.end_time && !self.template.nil?
-        # and it is within the viewing window for the day
-        if Clock.time >= Time.parse(self.config['from_time']) && Clock.time <= Time.parse(self.config['to_time'])
-          # and it is either marked as always shown
-          if self.config['display_when'].to_i == DISPLAY_CONTENT_EXISTS
-            # or if we detect actual content on the specified feed
-            if !self.feed.nil? && !self.feed.approved_contents.active.where('kind_id != 4').empty?
-              effective = true
-            end
-          elsif self.config['display_when'].to_i == DISPLAY_AS_SCHEDULED
-            if !self.config['scheduling_criteria'].empty?
-              s = IceCube::Schedule.new(self.start_time)
-              s.add_recurrence_rule(RecurringSelect.dirty_hash_to_rule(self.config['scheduling_criteria']))
-              effective = s.occurs_on? Clock.time
-            else
-              # no schedule was set
+      # This should consider time from the perspective of the screen's timezone...  so we will use Clock.time.in_time_zone(screen.time_zone) instead,
+      # espcially because the from_time and to_time in the config is stored without regard to timezone (ie: considered in terms of local time for the screen).
+      Time.use_zone(screen.time_zone) do
+        current_time = Clock.time.in_time_zone(screen.time_zone)
+Rails.logger.debug("\n\ntemplate = #{template.name}\ncurrent_time = #{current_time}\nfrom_time = #{Time.zone.parse(self.config['from_time'])}\nself.start_time = #{self.start_time.in_time_zone(screen.time_zone)}\n")
+        if current_time >= self.start_time && current_time <= self.end_time && !self.template.nil?
+          # and it is within the viewing window for the day
+          if current_time >= Time.zone.parse(self.config['from_time']) && current_time <= Time.zone.parse(self.config['to_time'])
+            # and it is either marked as always shown
+            if self.config['display_when'].to_i == DISPLAY_CONTENT_EXISTS
+              # or if we detect actual content on the specified feed
+              if !self.feed.nil? && !self.feed.approved_contents.active.where('kind_id != 4').empty?
+                effective = true
+              end
+            elsif self.config['display_when'].to_i == DISPLAY_AS_SCHEDULED
+              if !self.config['scheduling_criteria'].empty?
+                s = IceCube::Schedule.new(self.start_time)
+                s.add_recurrence_rule(RecurringSelect.dirty_hash_to_rule(self.config['scheduling_criteria']))
+                effective = s.occurs_on? current_time
+              else
+                # no schedule was set
+              end
             end
           end
         end
