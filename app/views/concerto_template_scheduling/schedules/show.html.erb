@@ -31,8 +31,8 @@
             <div class="default-padding clearfix">
                   <%= image_tag main_app.preview_template_path(@schedule.template, :height => 200, :format => :png), :style => "margin: 0px 1em 0px 0px;" %>
 
-                  <p><%= ConcertoTemplateScheduling::Schedule.human_attribute_name(:start_time)%>: <%= l(@schedule.start_time, :format => :short_day) %> <%= l(@schedule.start_time, :format => :twelve_hour_time) %></p>
-                  <p><%= ConcertoTemplateScheduling::Schedule.human_attribute_name(:end_time)%>: <%= l(@schedule.end_time, :format => :short_day) %> <%= l(@schedule.end_time, :format => :twelve_hour_time) %></p>
+                  <p><%= ConcertoTemplateScheduling::Schedule.human_attribute_name(:start_time)%>: <%= l(@schedule.start_time.in_time_zone(@schedule.screen.time_zone), :format => :short_day) %> <%= l(@schedule.start_time.in_time_zone(@schedule.screen.time_zone), :format => :twelve_hour_time) %></p>
+                  <p><%= ConcertoTemplateScheduling::Schedule.human_attribute_name(:end_time)%>: <%= l(@schedule.end_time.in_time_zone(@schedule.screen.time_zone), :format => :short_day) %> <%= l(@schedule.end_time.in_time_zone(@schedule.screen.time_zone), :format => :twelve_hour_time) %></p>
                   <p><%= t('concerto_template_scheduling.when')%>: <b><%= ConcertoTemplateScheduling::Schedule.display_when_options.key(@schedule.config['display_when'].to_i) %></b></p>
                   <% if @schedule.config['display_when'].to_i == ConcertoTemplateScheduling::Schedule::DISPLAY_CONTENT_EXISTS %>
                     <% feed = Feed.find(@schedule.config['feed_id'].to_i)

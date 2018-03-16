@@ -104,23 +104,27 @@ module ConcertoTemplateScheduling
     # Otherwise, just set it like normal.  This is a bit confusing due to the differences in how Ruby handles
     # times between 1.9.x and 1.8.x.
     def start_time=(_start_time)
-      if _start_time.kind_of?(Hash)
-        # convert to time, strip off the timezone offset so it reflects local time
-        t = DateTime.strptime("#{_start_time[:date]} #{_start_time[:time]}".gsub(I18n.t('time.am'), "am").gsub(I18n.t('time.pm'), "pm"), "#{I18n.t('time.formats.date_long_year')} %I:%M %P")
-        write_attribute(:start_time, Time.zone.parse(Time.iso8601(t.to_s).to_s(:db)))
-      else
-        write_attribute(:start_time, _start_time)
+      Time.use_zone(screen.time_zone) do
+        if _start_time.kind_of?(Hash)
+          # convert to time, strip off the timezone offset so it reflects local time
+          t = DateTime.strptime("#{_start_time[:date]} #{_start_time[:time]}".gsub(I18n.t('time.am'), "am").gsub(I18n.t('time.pm'), "pm"), "#{I18n.t('time.formats.date_long_year')} %I:%M %P")
+          write_attribute(:start_time, Time.zone.parse(Time.iso8601(t.to_s).to_s(:db)))
+        else
+          write_attribute(:start_time, _start_time)
+        end
       end
     end
 
     # See start_time=.
     def end_time=(_end_time)
-      if _end_time.kind_of?(Hash)
-        # convert to time, strip off the timezone offset so it reflects local time
-        t = DateTime.strptime("#{_end_time[:date]} #{_end_time[:time]}".gsub(I18n.t('time.am'), "am").gsub(I18n.t('time.pm'), "pm"), "#{I18n.t('time.formats.date_long_year')} %I:%M %P")
-        write_attribute(:end_time, Time.zone.parse(Time.iso8601(t.to_s).to_s(:db)))
-      else
-        write_attribute(:end_time, _end_time)
+      Time.use_zone(screen.time_zone) do
+        if _end_time.kind_of?(Hash)
+          # convert to time, strip off the timezone offset so it reflects local time
+          t = DateTime.strptime("#{_end_time[:date]} #{_end_time[:time]}".gsub(I18n.t('time.am'), "am").gsub(I18n.t('time.pm'), "pm"), "#{I18n.t('time.formats.date_long_year')} %I:%M %P")
+          write_attribute(:end_time, Time.zone.parse(Time.iso8601(t.to_s).to_s(:db)))
+        else
+          write_attribute(:end_time, _end_time)
+        end
       end
     end
 

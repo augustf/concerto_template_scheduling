@@ -34,8 +34,8 @@
               <%= image_tag main_app.preview_template_path(schedule.template, :height => 60, :format => :png), :style => "margin: 0px;" %>
             </td>
             <td>
-              <%= ConcertoTemplateScheduling::Schedule.human_attribute_name(:start_time)%>: <%= l(schedule.start_time, :format => :short_day) %> <%= l(schedule.start_time, :format => :twelve_hour_time) %><br/>
-              <%= ConcertoTemplateScheduling::Schedule.human_attribute_name(:end_time)%>: <%= l(schedule.end_time, :format => :short_day) %> <%= l(schedule.end_time, :format => :twelve_hour_time) %><br/>
+              <%= ConcertoTemplateScheduling::Schedule.human_attribute_name(:start_time)%>: <%= l(schedule.start_time.in_time_zone(schedule.screen.time_zone), :format => :short_day) %> <%= l(schedule.start_time.in_time_zone(schedule.screen.time_zone), :format => :twelve_hour_time) %><br/>
+              <%= ConcertoTemplateScheduling::Schedule.human_attribute_name(:end_time)%>: <%= l(schedule.end_time.in_time_zone(schedule.screen.time_zone), :format => :short_day) %> <%= l(schedule.end_time.in_time_zone(schedule.screen.time_zone), :format => :twelve_hour_time) %><br/>
               <%= t('concerto_template_scheduling.effective') %>: <b><%= schedule.is_effective? ? t(:yes) : t(:no) %></b>
             </td>
             <td>
