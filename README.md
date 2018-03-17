@@ -7,6 +7,8 @@ scheduling criteria is met.  A template can also be made active when content exi
 you want travel advisories or weather alerts to show at the bottom of your screen while still having your other content
 shown.
 
+## Installation
+
 To use this engine, add the plugin to Concerto via the UI, selecting rubygems as the source.
 
 Or add this `gem 'concerto_template_scheduling'` to your Gemfile and run bundle install, generate the migrations, and run them. Then restart your webserver.
@@ -16,6 +18,19 @@ rails generate concerto_template_scheduling
 rake db:migrate
 service apache2 restart
 ```
+
+## Troubleshooting
+
+If you click on the "Frequency" dropdown list and select "Set Schedule" and a "Repeat" pop up window does not appear, then you probably need to recompile your assets so the plugin's javascript gets included.
+
+In /usr/share/concerto, as the concerto user or as root, run
+```
+RAILS_ENV=production bundle exec rake assets:precompile
+chown -R www-data:www-data public/assets
+service apache2 restart
+```
+
+Then reload your webpage and the pop up to set the schedule should come up.
 
 ## Time Zone Perspective
 
