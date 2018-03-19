@@ -1,74 +1,75 @@
 de:
   activerecord:
     models:
-      concerto_template_scheduling/schedule: 'Schedule'
+      concerto_template_scheduling/schedule: 'Zeitplan'
     attributes:
       concerto_template_scheduling/schedule:
-        start_time: 'Active From'
-        end_time: 'Active Until'
-        data: 'Schedule'
-        screen_id: 'Screen'
-        template_id: 'Template'
-        display_when: 'Use Template When'
-        from_time: 'From Time'
-        to_time: 'Until Time'
-        scheduling_criteria: 'Scheduling Criteria'
+        start_time: 'Aktiv von'
+        end_time: 'Aktiv bis'
+        data: 'Zeitplan'
+        screen_id: 'Bildschirm'
+        template_id: 'Vorlage'
+        display_when: 'Aktiviere Vorlage durch'
+        from_time: 'von Uhrzeit'
+        to_time: 'bis Uhrzeit'
+        scheduling_criteria: 'Zeitplan Einstellungen'
+        feed: 'Kanal'
 
   concerto_template_scheduling:
-    always: 'Everyday'
-    are_you_sure_delete: 'Are you sure you want to delete the scheduled template %{template} for the %{screen} screen?'
-    as_scheduled: 'As Scheduled'
-    content_exists: 'Content Exists on Feed'
-    effective: 'Currently in Effect? '
-    for: 'for'
-    never: 'Never'
-    from_time_must_precede_to_time: "'From Time' must precede 'To Time'"
-    must_be_selected: 'must be selected'
-    valid: 'Active'
-    when: 'When'
-    schedule_must_be_defined: 'Scheduling Criteria must be defined when "Use Template When" is "As Scheduled"'
-    starting: 'starting'
+    always: 'Täglich'
+    are_you_sure_delete: 'Sind Sie sicher das Sie den Vorlagenzeitplan %{template} für Bildschirm %{screen} löschen möchten?'
+    as_scheduled: 'Nach Zeitplan'
+    content_exists: 'Kanal hat aktiven Inhalt'
+    effective: 'Gegenwärtig aktiv? '
+    for: 'für'
+    never: 'Niemals'
+    from_time_must_precede_to_time: "'von Uhrzeit' muss vor 'bis Uhrzeit' liegen"
+    must_be_selected: 'muss ausgewählt sein'
+    valid: 'Aktiv'
+    when: 'durch'
+    schedule_must_be_defined: 'Zeitplan Einstellungen müssen definiert werden, wenn "Aktiviere Vorlage durch" auf "Nach Zeitplan" gesetzt ist.'
+    starting: 'Einschalten'
 
     schedules:
       edit:
-        header: 'Edit Template Schedule for %{screen}'
+        header: 'Bearbeite Vorlagen-Zeitplan für %{screen}'
       form:
-        display_when_tip: 'You can specify that the template will never be used (effectively turning it "off"), will be used every day, will be used on the dates specified by the scheduling criteria, or will be used when content has been detected on a specific feed.'
-        provide_details: 'Provide Details'
-        set_specific_times: 'Set specific times'
-        times_tip: "This is the window during each qualified day that the template will be shown."
-        valid_from: 'Active From'
-        valid_until: 'Active Until'
-        valid_tip: "Active dates determine when a template could be displayed, providing that the 'Use Template When' criteria is met."
+        display_when_tip: 'Sie können festlegen, dass die Vorlage niemals verwendet wird (effektiv deaktivieren), jeden Tag verwendet wird, an den in den Einstellungen angegebenen Werten verwendet wird oder verwendet wird, wenn Inhalte für einen bestimmten Kanal erkannt wurden.'
+        provide_details: 'Einstellungen vornehmen'
+        set_specific_times: 'Uhrzeit einstellen'
+        times_tip: "Auf diesem Bildschirm wird die Vorlage an den definierten Tagen angezeigt."
+        valid_from: 'Aktiv von'
+        valid_until: 'Aktiv bis'
+        valid_tip: "Aktive Pläne bestimmen wann eine Vorlage angezeigt werden kann, vorausgesetzt, dass die Bedingung 'Aktiviere Vorlage durch' gesetzt ist."
       index:
-        no_templates_scheduled_header: 'No Templates Have Been Scheduled For Any Screens'
-        no_templates_scheduled_msg: "Templates can be scheduled from each screen's detail page."
+        no_templates_scheduled_header: 'Es sind für keinen Bildschirm Vorlagenzeitpläne vorhanden.'
+        no_templates_scheduled_msg: "Vorlagenzeitpläne können von allen Bildschirmdetailseiten erstellt werden."
       new:
-        header: 'New Template Schedule for %{screen}'
+        header: 'Neue Vorlagenzeitplan für %{screen}'
       show:
-        template_for_screen: '%{template} Template for %{screen} Screen'
+        template_for_screen: '%{template} Vorlage für %{screen} Bildschirm'
 
     screens:
       screen_link:
-        add_schedule: 'Add'
-        add_schedule_msg: 'Schedule a template for this screen.'
-        display: 'Display'
-        edit_schedule: 'Edit'
-        footer: 'Scheduled templates will prevail over the default template assigned to the screen.  If multiple scheduled templates are active at the same time one will be arbitrarily chosen.'
-        no_templates_scheduled_header: 'No Templates Scheduled'
-        no_templates_scheduled_msg: 'No templates have been scheduled for this screen.  The template assigned to the screen will be used.'
-        scheduled_templates: 'Scheduled Templates'
+        add_schedule: 'Hinzufügen'
+        add_schedule_msg: 'Vorlagenzeitplan für den Bildschirm erstellen.'
+        display: 'Anzeigen'
+        edit_schedule: 'Bearbeiten'
+        footer: 'Die zeitgesteuerte Vorlage ersetzt die Standard-Vorlage des Bildschirms sofern diese aktiv ist. Wenn mehrere Vorlagen zum gleichen Zeitpunkt aktiv sind, wird zufällig eine ausgewählt.'
+        no_templates_scheduled_header: 'Keine Vorlage geplant'
+        no_templates_scheduled_msg: 'Keine Vorlagen für den Bildschirm geplant. Die dem Bildschirm zugeordnete Vorlage wird verwendet.'
+        scheduled_templates: 'Vorlagenzeitpläne'
 
     templates:
       in_use_by:
-        scheduled_for_the_following_screens: 'Scheduled for the following screens'
+        scheduled_for_the_following_screens: 'Geplant für folgende Bildschirme'
 
   public_activity:
     concerto_template_scheduling:
       schedule:
         create:
-          scheduled_template: 'scheduled template '
+          scheduled_template: 'Vorlagenzeitplan erstellt '
         destroy:
-          deleted_a_schedule: 'deleted a scheduled template '
+          deleted_a_schedule: 'Vorlagenzeitplan gelöscht '
         update:
-          updated_template: 'updated schedule for template '
+          updated_template: 'Vorlagenzeitplan aktualisiert '
